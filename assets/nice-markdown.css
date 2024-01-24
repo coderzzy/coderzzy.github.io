@@ -37,10 +37,6 @@
   h2 {
     border-bottom: 2px solid rgb(239, 112, 96);
     font-size: 1em;
-    
-  }
-  /* 二级标题内容 */
-  h2 .content {
     display: inline-block;
     font-weight: bold;
     background: rgb(239, 112, 96);
@@ -49,6 +45,10 @@
     border-top-right-radius: 3px;
     border-top-left-radius: 3px;
     margin-right: 3px;
+  }
+  /* 二级标题内容 */
+  h2 .content {
+    
   }
   /* 二级标题修饰 请参考有实例的主题 */
   h2:after {
