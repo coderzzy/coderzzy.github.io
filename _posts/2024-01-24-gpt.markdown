@@ -3,7 +3,7 @@ layout: post
 title: GPT-如何调用主流语言模型的API
 toc:  true
 css:
-  - "assets/nice-markdown.css"
+  - "assets/markdown.css"
 ---
 
 > **ChatGPT**一声炮响，世界迎来了大模型时代。
