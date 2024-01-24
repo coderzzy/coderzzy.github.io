@@ -78,10 +78,9 @@ a:focus {
 blockquote {
 	border-left-color: rgb(239, 112, 96);
     background: #fff9f9;
-
 }
 blockquote:before {
-	content: "“";
+	content: "";
 	left: 12px;
 	top: 0;
 	color: #E0E0E0;
