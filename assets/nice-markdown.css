@@ -23,10 +23,11 @@
   h1 {
     font-size: 1em;
     text-align: center;
+    color: #0000FF;
   }
   /* 一级标题内容 */
   h1 .content {
-    color: #0000FF;
+    
   }
   /* 一级标题修饰 请参考有实例的主题 */
   h1:after {
