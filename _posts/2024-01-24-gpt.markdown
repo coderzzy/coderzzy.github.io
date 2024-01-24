@@ -46,10 +46,11 @@ GPT（Generative Pre-trained Transformer），基于转换器的生成式预训�
 申请成为个人开发者，也只要在同页面注册账号即可；登录后，侧边栏可以展开，具备 API-KEY 注册，费用统计，以及账户费用预充值（平台注册账号后，会默认**送一部分费用**，但有使用限制，比如无法调用 GPT-4）等功能。
 
 至于收费标准，则位于[OpenAI 官网首页](https://openai.com/pricing)，核心如下：
+
 | 模型 | 输入 | 输出 |
 | --- | --- | --- |
-| gpt-4 | $0.03 / 千tokens |$0.06 / 千 tokens |
-| gpt-3.5-turbo-1106 | $0.0010 / 千tokens |$0.0020 / 千 tokens |
+| gpt-4 | \$0.03 / 千tokens | \$0.06 / 千 tokens |
+| gpt-3.5-turbo-1106 | \$0.0010 / 千tokens | \$0.0020 / 千 tokens |
 
 
 ## 文本处理代码
