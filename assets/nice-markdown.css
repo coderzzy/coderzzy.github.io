@@ -89,12 +89,12 @@
    * 左边缘颜色 border-left-color: black;
    * 背景色 background: gray;
    */
-  .multiquote-1 {
+  blockquote {
     border-left-color: rgb(239, 112, 96);
     background: #fff9f9;
   }
   /* 引用文字 */
-  .multiquote-1 p {
+  blockquote p {
   }
   /* 链接 
    * border-bottom: 1px solid #009688;
