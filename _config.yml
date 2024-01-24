@@ -57,3 +57,6 @@ author:
   name: 张小刀
   url: https://github.com/coderzzy
   email: zyzhang_dev@163.com
+
+# 允许加载远程地址
+safe: false
