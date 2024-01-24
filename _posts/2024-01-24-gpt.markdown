@@ -165,6 +165,7 @@ if __name__ == "__main__":
 而想申请成为 API 的个人开发者，则需要进入百度的[AI Studio 飞桨平台](https://aistudio.baidu.com/cooperate/yiyan)，获取 ACCESS-TOKEN。收费上，每个账户初始有**100 万 token 的免费额度**，但没有使用详情页面，以及未看到之后的收费方式。
 
 另一种目前暂未体验的，则是在[百度智能云千帆大模型平台](https://cloud.baidu.com/product/wenxinworkshop)成为开发者，得到一体化的大模型 API 处理服务（包括**微调、数据集、Prompt 工程**等），核心收费如下：
+
 | 模型 | 输入 | 输出 |
 | --- | --- | --- |
 | ERNIE-Bot 4.0 | 0.12 元 / 千 tokens |0.12 元 / 千 tokens |
