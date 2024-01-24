@@ -1,19 +1,10 @@
-/* Sspai Web Theme A theme to [sspai](ssp.ai) default theme. Developed by Codegass(wchweichenhao@gmial.com) & Yves(yves@sspai.com) Download Cuto on the App Store and Google Play! */
-
 body {
-	font-size: 15px;
-	color: #333;
-	background: #fff;
-	font-family: Helvetica, Arial, "PingFang SC", "Microsoft YaHei", "WenQuanYi Micro Hei", "tohoma,sans-serif";
-	margin: 0;
-	padding: 10%;
+	padding: 0px;
 }
 h1 {
-	font-size: 2.2em;
-	font-weight: 700;
-	line-height: 1.1;
-	padding-top: 16px;
-	margin-bottom: 4px;
+	font-size: 1em;
+	text-align: center;
+	color: #0000FF;
 }
 h2, h3, h4, h5, h6 {
 	line-height: 1.5em;
@@ -84,15 +75,9 @@ a:focus {
 	outline-offset: -2px;
 }
 blockquote {
-	font-size: 1em;
-	font-style: normal;
-	padding: 30px 38px;
-	margin: 0 0 15px;
-	position: relative;
-	line-height: 1.8;
-	text-indent: 0;
-	border: none;
-	color: #888;
+	border-left-color: rgb(239, 112, 96);
+    background: #fff9f9;
+	
 }
 blockquote:before {
 	content: "“";
