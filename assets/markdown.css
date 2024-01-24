@@ -7,12 +7,12 @@ h1 {
 	color: #0000FF;
 }
 h2, h3, h4, h5, h6 {
-	line-height: 1.5em;
+	line-height: 1em;
 	margin-top: 2.2em;
 	margin-bottom: 4px;
 }
 h2 {
-	font-size: 1.4em;
+	font-size: 1em;
 	margin: 40px 10px 20px 0;
 	padding-left: 9px;
 	border-left: 6px solid #ff7e79;
@@ -77,7 +77,7 @@ a:focus {
 blockquote {
 	border-left-color: rgb(239, 112, 96);
     background: #fff9f9;
-	
+
 }
 blockquote:before {
 	content: "“";
@@ -246,4 +246,13 @@ a:target {
 a:target {
 	border: 0;
 	outline: 0;
+}
+
+table {
+	table-layout: fixed;
+	width: 100%
+}
+table tr th,
+table tr td {
+	font-size: 0.9em;
 }
