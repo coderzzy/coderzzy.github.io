@@ -1,9 +1,9 @@
 - title: Email
   url: mailto://zyzhang_dev@163.com
   icon: fas fa-envelope
-- title: Twitter
-  url: https://twitter.com/coderzzy
-  icon: fab fa-twitter
+- title: Wechat
+  url: https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=Mzg5MjgxMTkyNg==&scene=124#wechat_redirect
+  icon: fab fa-weixin
 - title: GitHub
   url: https://github.com/coderzzy/coderzzy.github.io
   icon: fab fa-github
