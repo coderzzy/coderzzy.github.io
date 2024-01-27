@@ -1,6 +1,6 @@
 ---
 layout: post
-title: GPT-如何调用主流语言模型的API
+title: 大模型，小探索 —— 调用主流语言模型的API
 toc:  true
 css:
   - "assets/markdown.css"
