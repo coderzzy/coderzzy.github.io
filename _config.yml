@@ -62,6 +62,3 @@ author:
 safe: false
 
 markdown: kramdown
-kramdown:
-  input:  GFM
-  use_coderay: true
