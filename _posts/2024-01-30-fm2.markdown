@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 金融数学 学了啥(下)
+title: 金融数学 学了啥(下) —— 金融模型
 toc:  true
 author: 小刀
 css:
