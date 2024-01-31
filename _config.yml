@@ -60,3 +60,8 @@ author:
 
 # 允许加载远程地址
 safe: false
+
+markdown: kramdown
+kramdown:
+  input:  GFM
+  use_coderay: true
