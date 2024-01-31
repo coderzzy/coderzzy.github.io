@@ -2,6 +2,7 @@
 layout: post
 title: 大模型，小探索 —— 调用主流语言模型的API
 toc:  true
+author: 小狗屁
 css:
   - "assets/markdown.css"
 ---

@@ -2,6 +2,7 @@
 layout: post
 title: '金融数学'学了啥(下)
 toc:  true
+author: 小刀
 css:
   - "assets/markdown.css"
 ---
