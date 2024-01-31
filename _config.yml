@@ -62,4 +62,4 @@ author:
 safe: false
 
 markdown: kramdown
-  toc_levels: 1..6
+toc_levels: 1..6
