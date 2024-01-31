@@ -24,8 +24,11 @@ css:
 主要应用在
 
 - 伊藤引理中，需要求一阶和二阶偏导 $\frac{\partial f}{\partial x},\frac{\partial^2 f}{\partial x^2},\frac{\partial f}{\partial t} $
+
   $$d(e^x)=e^xdx$$
-  $$d(x^\mu)=\mu x^{\mu-1}dx$$
+  $$
+  d(x^\mu)=\mu x^{\mu-1}dx
+  $$
 
 ## 常用的积分/定积分
 
