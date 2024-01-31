@@ -26,10 +26,15 @@ css:
 ## 存款&利率 Deposit & Interest Rate
 
 离散型复利:
+
 $$(1+r)^T$$  
+
 连续型复利(一般无特殊说明，衍生品默认考虑该复利下的价格):
-$$e^{rT}，(\lim \limits_{n \to \infty}(1+\frac{r}{n})^n=e^r)$$  
+
+$$e^{rT}，(\lim \limits_{n \to \infty}(1+\frac{r}{n})^n=e^r)$$ 
+
 现值/贴现:
+
 $$P(t)=P(T)e^{-r(T-t)}$$
 
 ### 例如: 年度连续型复利 $r=6\%$，$t=0$ 时存款为 $100$，则 $T=6$ 个月时的收益？
@@ -61,14 +66,18 @@ $$
 ### 例如: 年度离散型复利为 r，债券的面值为 F，合约期为 T 年，每一年支付利息为 C，则 0 时刻的贴现值？
 
 1. 面值的贴现，即为 T 年后的价值按照复利进行折算:
+
    $$PV_F = \frac{F}{(1+r)^T}$$
+
 2. 票息的贴现，即为 T 年的票息贴现 + T-1 年票息的贴现 + ...
+
    $$
    \begin{aligned}
    PV_C &= \frac{C}{(1+r)^T} + \frac{C}{(1+r)^{T-1}} + ... + \frac{C}{1+r} \\
    &= \frac{C}{r}(1-\frac{1}{(1+r)^T})
    \end{aligned}
    $$
+
 3. 债券的贴现即为两部分之和。且如果债券<font color='red'>定价低于贴现值，则可以考虑买入</font>。
 
 ## 金融衍生品 Derivatives & 金融操作和法则
@@ -161,7 +170,7 @@ Case2: 对于到期日为 $T$ 的远期合约，$K > S(t)e^{r(T-t)}$，即交割
 
 - Long European Call Option
   - 不行权 或者 花了 K，得到 S:
-  - $(S(T)-K)^+ = max\{S(T)-K, 0\}$，利润则用回报再减去保险费 $c$
+  - $(S(T)-K)^+ = max\\{S(T)-K, 0\\}$，利润则用回报再减去保险费 $c$
     ![](https://files.mdnice.com/user/44560/0ee18ca6-9a20-4d66-9477-593a41445e2e.png)
 - Long European Put Option
   - 不行权 或者 卖了 S，得到 K:
