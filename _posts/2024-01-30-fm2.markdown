@@ -249,10 +249,10 @@ $$
 
 ### 例 $1$: 年度连续型复利 $r=5\%$，考虑伯努利模型，一只股票 $S_0=40$，一年后各有 $50\%$ 概率为 $45$ 和 $39$；计算欧式看跌期权的定价(到期日为 $1$ 年，行权价格为 $41$)
 
-1. 伯努利树
+1、 伯努利树
    ![](https://files.mdnice.com/user/44560/d6714eac-a9b1-455b-b5dc-12f8db46a2d1.png)
 
-2. 风险中立概率
+2、 风险中立概率
 
 $$
 \mu = 45/40 = 1.125，d=39/40=0.975
@@ -273,9 +273,9 @@ $$
 \right.
 $$
 
-3. $t=1$ 时，$\Phi(X)=(41-S_1)^+$
+3、 $t=1$ 时，$\Phi(X)=(41-S_1)^+$
 
-4. 定价为:
+4、 定价为:
 
 $$
 \begin{aligned}
@@ -299,10 +299,10 @@ $$
 
 ### 例 $2$: 年度连续型复利 $r=4\%$，考虑伯努利模型，一只股票 $S_0=40$，每一个序列(三个月)内，要么上涨或下跌 $10\%$，一直进行三个序列；计算欧式看涨期权的定价(到期日为 $9$ 个月，行权价格为 $45$)
 
-1. 伯努利树
+1、 伯努利树
    ![](https://files.mdnice.com/user/44560/0deb5727-3029-4ebc-a200-14ddcd1af6a0.png)
 
-2. 风险中立概率(每个序列-$3$ 个月，均相同)
+2、 风险中立概率(每个序列-$3$ 个月，均相同)
 
 $$
 \mu = 1.1，d=0.9，r=0.04/4=1
@@ -323,9 +323,9 @@ $$
 \right.
 $$
 
-3. $t=3$ 时，$\Phi(X)=(S_3-45)^+$
+3、 $t=3$ 时，$\Phi(X)=(S_3-45)^+$
 
-4. 定价为:
+4、 定价为:
 
 $$
 \begin{aligned}
@@ -356,10 +356,10 @@ $$
 
 美式期权和欧式期权计算方法类似，只是过程中可以提前行权，即需要<font color='red'>比较提前行权是否比贴现回报更大</font>。
 
-1. 伯努利树
+1、 伯努利树
    ![](https://files.mdnice.com/user/44560/0deb5727-3029-4ebc-a200-14ddcd1af6a0.png)
 
-2. 风险中立概率(每个序列-$3$ 个月，均相同)
+2、 风险中立概率(每个序列-$3$ 个月，均相同)
 
 $$
 \mu = 1.1，d=0.9，r=0.04/4=1
@@ -380,9 +380,9 @@ $$
 \right.
 $$
 
-3. $t=3$ 时，$\Phi(X)=(45-S_3)^+$
+3、 $t=3$ 时，$\Phi(X)=(45-S_3)^+$
 
-4. 定价为:
+4、 定价为:
 
 $$
 \begin{aligned}
@@ -447,8 +447,8 @@ $$
 
 ### 例 $5$: 判断 $X_t = \alpha W_{\frac{t}{\alpha^2}}$，是否为布朗运动？
 
-1 $X_0 = \alpha W_0 = 0$，符合
-2 对于所有 $0 \le s < t$，
+1、 $X_0 = \alpha W_0 = 0$，符合
+2、 对于所有 $0 \le s < t$，
 
 $$
 \begin{aligned}
@@ -463,7 +463,7 @@ Var(X_t-X_s) &= \alpha^2 (Var(W_{\frac{t}{\alpha^2}})-Var(W_{\frac{s}{\alpha^2}}
 \end{aligned}
 $$
 
-3 对于任意 $r < s \le t < \mu$
+3、 对于任意 $r < s \le t < \mu$
 
 $$
 \begin{aligned}
@@ -474,7 +474,7 @@ E[(X_{\mu} &- X_t)(X_{s} - X_r)] \\
 \end{aligned}
 $$
 
-4 基本的运算，不改变连续性，因此所有路径仍然是连续的  
+4、 基本的运算，不改变连续性，因此所有路径仍然是连续的  
    综上，这是布朗运动。
 
 ## B-S 模型——伊藤引理 Ito's lemma，解随机微分方程 SDE
@@ -545,6 +545,7 @@ $$
 - $ 记 f(t, X_t) = Y_t=(X_t-\mu)e^{\theta t}$
     - $\frac{\partial f}{\partial t} = \theta (X_t-\mu)e^{\theta t}$，$\frac{\partial f}{\partial x} = e^{\theta t}$，$\frac{\partial^2 f}{\partial x^2} = 0$
     - 运用伊藤公式，
+    
 $$
 \begin{aligned}
 dY_t &= \frac{\partial f}{\partial t}dt + \frac{\partial f}{\partial x}dX_t + \frac{1}{2}\frac{\partial^2 f}{\partial x^2}< dX_t,dX_t>\\
@@ -553,6 +554,7 @@ dY_t &= \frac{\partial f}{\partial t}dt + \frac{\partial f}{\partial x}dX_t + \f
 $$
     
 - 重新代入 $X_t$
+
 $$
 \begin{aligned}
 dY_t &= \theta (X_t-\mu)e^{\theta t}dt + e^{\theta t}[\sigma dW_t + \theta(\mu -X_t)dt]\\
