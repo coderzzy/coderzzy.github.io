@@ -25,10 +25,9 @@ css:
 
 - 伊藤引理中，需要求一阶和二阶偏导 $\frac{\partial f}{\partial x},\frac{\partial^2 f}{\partial x^2},\frac{\partial f}{\partial t} $
 
-  $$d(e^x)=e^xdx$$
-  $$
-  d(x^\mu)=\mu x^{\mu-1}dx
-  $$
+  $$\begin{aligned} d(e^x)=e^xdx \end{aligned}$$
+
+  $$d(x^\mu)=\mu x^{\mu-1}dx$$
 
 ## 常用的积分/定积分
 
@@ -38,7 +37,9 @@ css:
 - 布朗运动及 B-S 模型下，连续型随机变量的数学期望 $E(X)$，方差 $Var(X)$ 的计算
 
 **分部积分**
+
 $$ \int f(x)g'(x)dx = f(x)g(x) - \int f'(x)g(x)$$
+
 **正态分布相关**
 
 $$
