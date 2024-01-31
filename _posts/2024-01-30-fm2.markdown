@@ -82,6 +82,7 @@ E(g(X))=\int_{-\infty}^{+\infty}g(x)f(x)dx
 $$
 
 $$E(C)=C，C是常数 $$
+
 $$E(aX)=aE(X)，a是常数 $$
 
 $$
@@ -108,6 +109,7 @@ Var(X)&=E((X-\mu)^2)\\
 $$
 
 $$Var(C)=0,C是常数 $$
+
 $$Var(aX)=a^2Var(X), a是常数 $$
 
 $$
@@ -136,10 +138,15 @@ Cov(X,Y)&=0，\\
 $$
 
 **一维正态分布** $N(\mu, \sigma^2)$
+
 $$ 概率密度函数 f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$
+
 $$ E(X)=\mu，Var(X)=\sigma^2$$
+
 $$ 标准正态分布 N(0,1)，f(x)=\frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}$$
+
 **标准正态分布累积分布函数 CDF** $N(d)$
+
 $$N(d)=P(X \le d) = \int_{-\infty}^{d}\frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}dx$$
 
 **指示函数** $\mathbb{1}_A$
@@ -169,7 +176,7 @@ $$
 - 衍生品的定价，来自于让其价格变动和股票价格变动的差值与利率 $r$ 相关，即希望 $dI(t) = df(t, St) - △dSt = rI(t)dt$
   - 该<font color='red'>随机微分方程($SDE$，包含了随机变量项)</font>，需要新的数学求解法，因而需要借助<font color='red'>伊藤引理</font>。
   - 求解之后，会得到一个偏微分方程，即为<font color='red'>B-S 偏微分方程</font>($PDE$)，求解需要借助<font color='red'>费曼-卡茨公式</font>(Feynman–Kac formula)，转换为<font color='red'>随机过程的条件期望</font>(实际上，这就是"风险中立下，衍生品的平均价格"对应到连续型变量的形式)。
-  - <font color='red'>求解该条件数学期望</font>，最终可以得到目标衍生品的定价。
+  - <font color='red'>求解该条件数学期望</font>后，最终可以得到目标衍生品的定价。
   
 ## <center><font color='blue'>伯努利模型</font></center>
 
@@ -267,6 +274,7 @@ $$
 $$
 
 3. $t=1$ 时，$\Phi(X)=(41-S_1)^+$
+
 4. 定价为:
 
 $$
@@ -316,6 +324,7 @@ $$
 $$
 
 3. $t=3$ 时，$\Phi(X)=(S_3-45)^+$
+
 4. 定价为:
 
 $$
@@ -372,6 +381,7 @@ $$
 $$
 
 3. $t=3$ 时，$\Phi(X)=(45-S_3)^+$
+
 4. 定价为:
 
 $$
@@ -437,8 +447,8 @@ $$
 
 ### 例 $5$: 判断 $X_t = \alpha W_{\frac{t}{\alpha^2}}$，是否为布朗运动？
 
-1. $X_0 = \alpha W_0 = 0$，符合
-2. 对于所有 $0 \le s < t$，
+1 $X_0 = \alpha W_0 = 0$，符合
+2 对于所有 $0 \le s < t$，
 
 $$
 \begin{aligned}
@@ -453,7 +463,7 @@ Var(X_t-X_s) &= \alpha^2 (Var(W_{\frac{t}{\alpha^2}})-Var(W_{\frac{s}{\alpha^2}}
 \end{aligned}
 $$
 
-3. 对于任意 $r < s \le t < \mu$
+3 对于任意 $r < s \le t < \mu$
 
 $$
 \begin{aligned}
@@ -464,7 +474,7 @@ E[(X_{\mu} &- X_t)(X_{s} - X_r)] \\
 \end{aligned}
 $$
 
-4. 基本的运算，不改变连续性，因此所有路径仍然是连续的  
+4 基本的运算，不改变连续性，因此所有路径仍然是连续的  
    综上，这是布朗运动。
 
 ## B-S 模型——伊藤引理 Ito's lemma，解随机微分方程 SDE
@@ -472,12 +482,11 @@ $$
 **伊藤等距 Ito isometry**
 
 - 对于布朗运动 $W_t$ 和 $(g_s)_{s \in [0,T]}$,
-  <font color='red'>
 
+<font color='red'>
 $$
 E[(\int_{0}^{T}g_sdW_s)^2] = E[\int_{0}^{T}(g_s)^2ds]，(消除W_t)
 $$
-
 </font>
 
 - 推论 1: 对于布朗运动 $W_t$ 和 $(X_s)_{s \in [0,T]}$，$(Y_s)_{s \in [0,T]}$
@@ -493,12 +502,11 @@ E[(\int_{a}^{b}X_sdW_s)(W_b-W_a)] = E[\int_{a}^{b}X_sds]
 $$
 
 - 伊藤积分的性质: 对于布朗运动 $W_t$ 和 $(g_s)_{s \in [0,T]}$,
-  <font color='red'>
 
+<font color='red'>
 $$
 E[\int_{0}^{t}g_sdW_s] = 0
 $$
-
 </font>
 
 **伊藤过程**
@@ -512,18 +520,18 @@ $$
 **伊藤公式**
 
 - 已知伊藤过程 $X_t$，和另一个过程 $Y_t=f(t,X_t)$，则以下等式成立:
-  <font color='red'>
 
+<font color='red'>
 $$
   \begin{aligned}
 dY_t = df(t,X_t) = \frac{\partial f}{\partial t}dt + \frac{\partial f}{\partial x}dX_t + \frac{1}{2}\frac{\partial^2 f}{\partial x^2}< dX_t,dX_t>,\\
   < dt,dW_t> = < dW_t,dt> = < dt,dt> = 0,< dW_t,dW_t> = dt
   \end{aligned}
 $$
-
 </font>
     
 - 特殊的，对于布朗运动，即 $X_t=W_t$，$Y_t=f(X_t)=f(W_t)$，
+
 $$
   \begin{aligned}
 dY_t = df(W_t) &= \frac{\partial f}{\partial w}dW_t + \frac{1}{2}\frac{\partial^2 f}{\partial w^2}< dW_t,dW_t>\\
@@ -692,17 +700,17 @@ dX_s = \mu(s,X_s)ds + \sigma(s,X_s)dW_s，X_t = x
 $$
 
 - 则，原方程的的解，$f(t,x)$ 为
-  <font color='red'>
 
+<font color='red'>
 $$
 f(t,x)=e^{-r(T-t)}E[\Phi(X_T)]
 $$
-
 </font>
     
 - 证明思路: 记 $Y_t = e^{-rt}f(t,x)$，再运用伊藤公式求解 $Y_t$，最终方程两边同时求数学期望即可得到等式。
     
 ### 例 $8$ (<font color='red'>B-S偏微分方程求解</font>):已知如下偏微分方程，出于简化，仅求解 $f(0,x) 即可 $
+
 $$
 \begin{aligned}
   \frac{\partial f}{\partial t}(t,x) + &rx\frac{\partial f}{\partial t}(t,x) + \frac{1}{2}\sigma^2x^2\frac{\partial^2 f}{\partial x^2}(t,x) - rf(t,x)=0\\
@@ -714,7 +722,7 @@ $$
 - 对应的伊藤过程 $dX_s = rX_s + \sigma X_sdW_s$，实际上，这是个指数布朗运动，由例 $7$ 可知 $X_T = X_0e^{(r - \frac{1}{2}\sigma^2)T + \sigma W_T}$，即 $S_T = S_0e^{(r - \frac{1}{2}\sigma^2)T + \sigma W_T}$
 - 则，原方程的的解，$f(0,S_t)$ 为
   - 记 $d_+=\frac{ln^{\frac{S_0}{K}}+(r+\frac{\sigma^2}{2})T}{\sigma \sqrt{T}}$,
-  - $d_{\_}=\frac{ln^{\frac{S_0}{K}}+(r-\frac{\sigma^2}{2})T}{\sigma \sqrt{T}}$,
+  - $d_{\-}=\frac{ln^{\frac{S_0}{K}}+(r-\frac{\sigma^2}{2})T}{\sigma \sqrt{T}}$,
   - $N(0,1)$ 为标准正态分布
   - $N(d)$ 为标准正态分布的累积分布函数
 
@@ -747,32 +755,41 @@ $$
 ## B-S 模型——几何布朗运动+期权定价
 **市场假设** $S$
 - 即为例 $7$ 中的指数布朗运动，即股票的价格满足随机微分方程
+
 $$
 dS_t = \mu S_tdt + \sigma S_tdW_t, S_0=S_0>0
 $$
+
 - 并且对应的解，$S_t = S_0e^{(\mu - \frac{1}{2}\sigma^2)t + \sigma W_t}$
     
 **B-S PDE 偏微分方程**
 - $f(t, St)$为对应$△S$的标的物的衍生品的价格，则其投资价值满足$dI(t) = df(t, St) - △dSt$
 - 对$f(t, St)$运用伊藤公式，化简可得
+
 $$
 \begin{aligned}
   df(t, St) = [\frac{\partial f}{\partial t} + \frac{\partial f}{\partial s}\mu S_t + \frac{1}{2}\frac{\partial^2 f}{\partial s^2}\sigma^2S_t^2]dt + [\frac{\partial f}{\partial s}\sigma S_t]dW_t\\
 \end{aligned}
 $$
+
 - 代入化简可得
+
 $$
 \begin{aligned}
   dI(t) = [\frac{\partial f}{\partial t} + (\frac{\partial f}{\partial s} - △)\mu S_t + \frac{1}{2}\frac{\partial^2 f}{\partial s^2}\sigma^2S_t^2]dt + [(\frac{\partial f}{\partial s} - △)\sigma S_t]dW_t\\
 \end{aligned}
 $$
+
 - 若 $△ = \frac{\partial f}{\partial s}$，且$dI(t)=rI(t)dt$时，则可以得到风险中立的$f(t,S_t)$所满足的等式
+
 $$
 \begin{aligned}
   (\frac{\partial f}{\partial t} + \frac{1}{2}\frac{\partial^2 f}{\partial s^2}\sigma^2S_t^2)dt = r(f(t,S_t) - \frac{\partial f}{\partial s}S_t)dt\\
 \end{aligned}
 $$
+
 - 即 <font color='red'>风险中立的$f(t,S_t)$所满足的等式/偏微分方程</font>:
+
 $$
 \begin{aligned}
   \frac{\partial f}{\partial t}(t,x) + rx\frac{\partial f}{\partial t}(t,x) + &\frac{1}{2}\sigma^2x^2\frac{\partial^2 f}{\partial x^2}(t,x) - rf(t,x)=0\\
@@ -784,17 +801,20 @@ $$
 - 求解偏微分方程，即可得到期权定价，例 $8$ 即为看涨期权定价的求解过程。
 - 记，
   - $d_+=\frac{ln^{\frac{S_0}{K}}+(r+\frac{\sigma^2}{2})(T-t)}{\sigma \sqrt{T-t}}$,
-  - $d_{\_}=\frac{ln^{\frac{S_0}{K}}+(r-\frac{\sigma^2}{2})(T-t)}{\sigma \sqrt{T-t}}=d_+ - \sigma \sqrt{T-t}$,
+  - $d_{\-}=\frac{ln^{\frac{S_0}{K}}+(r-\frac{\sigma^2}{2})(T-t)}{\sigma \sqrt{T-t}}=d_+ - \sigma \sqrt{T-t}$,
   - $N(0,1)$ 为标准正态分布
   - $N(d)$ 为标准正态分布的累积分布函数
 - 看涨期权在$t$时刻的定价为:
+
 $$
     \begin{aligned}
   C(t,S_t;T,K) &= e^{-r(T-t)}E[(S_T -K)^+]\\
     &=S_tN(d_+) - Ke^{-r(T-t)}N(d_{\_})
     \end{aligned}
 $$
+
 - 看跌期权在$t$时刻的定价为:
+
 $$
     \begin{aligned}
   P(t,S_t;T,K) &= e^{-r(T-t)}E[(K-S_T)^+]\\
@@ -803,6 +823,7 @@ $$
 $$
 
 ## <center><font color='blue'>小 结</font></center>
+
 | 模型    |  伯努利模型   | B-S模型    |
 | --- | --- | --- |
 | 市场假设    | 伯努利树    | 指数布朗运动    |
