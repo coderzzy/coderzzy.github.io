@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "金融数学"学了啥(上)
+title: \\"金融数学\\"学了啥(上)
 toc:  true
 css:
   - "assets/markdown.css"
