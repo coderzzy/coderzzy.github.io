@@ -7,6 +7,8 @@ css:
   - "assets/markdown.css"
 ---
 
+微信公众号内容地址: https://mp.weixin.qq.com/s/12tyDd6Os583rBF4IeyfCg
+
 > **ChatGPT**一声炮响，世界迎来了大模型时代。
 
 这里是小狗屁(GP·T)的大模型探索专题，在这里我将记录和介绍在大模型探索中的点点滴滴，开启 **GPT 的成长之路**。
