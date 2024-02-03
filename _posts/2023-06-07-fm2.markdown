@@ -3,7 +3,7 @@ layout: post
 title: 金融数学 学了啥(下) —— 金融模型
 toc:  true
 author: 小刀
-tags: ['水硕'日记]
+tags: [水硕日记]
 css:
   - "assets/markdown.css"
 ---
