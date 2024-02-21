@@ -8,7 +8,7 @@ css:
   - "assets/markdown.css"
 ---
 
-微信公众号内容地址: 
+微信公众号内容地址: https://mp.weixin.qq.com/s/jrB8z1gSt6CF16ifeLyK3w
 
 > 算力，就是新一代的“石油”
 
