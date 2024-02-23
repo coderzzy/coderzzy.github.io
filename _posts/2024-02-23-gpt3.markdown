@@ -8,11 +8,11 @@ css:
   - "assets/markdown.css"
 ---
 
-微信公众号内容地址:
+微信公众号内容地址: https://mp.weixin.qq.com/s/HEVb_dqj5ziyyEe2RGPI9w
 
 > Sora 背后的两大技术革新：Patch 补丁 + DiT 扩散型变换器（Diffusion Transformer）
 
-上一篇小狗屁刚搞定了“万事开头难”——**超算互联网平台的试用**和**百川大模型的部署**，OpenAI 就又发布了新的王炸 —— Sora，视频生成模型。
+上一篇小狗屁刚搞定了“万事开头难” —— **超算互联网平台的试用**和**百川大模型的部署**，OpenAI 就又发布了新的王炸 —— Sora，视频生成模型。
 
 在看了一轮铺天盖地的相关文章之后，小狗屁总结，适合小步迭代的第一步，便是继续**在超算互联网平台上部署 stable diffusion，图片生成模型**。一方面，仍然是按照“<font color='red'>先部署，再训练；先实验，再理论</font>”的小探索模式；另一方面，也验证下举一反三的能力，测试部署效率。
 
@@ -164,7 +164,9 @@ exit # 退出任务
 
 为后期的训练模型做准备，平台也提供了“作业提交”方式运行任务，而不用人守在控制台前。
 
-![](https://files.mdnice.com/user/44560/d2d9a247-c59a-489b-b03e-ab9f1aa11a45.png)
+
+![](https://files.mdnice.com/user/44560/233fb884-d9ba-4785-a352-101c86440b16.png)
+
 
 点击基础模板，接着设置核数为 16，DCU 数为 2，工作目录为用户根目录，以及命令行为：
 
@@ -173,20 +175,24 @@ module switch compiler/rocm/dtk-22.10.1
 source ~/miniconda3/bin/activate ldm
 export LD_LIBRARY_PATH=~/miniconda3/envs/ldm/lib:$LD_LIBRARY_PATH
 cd LLM/stable-diffusion/
-python3 scripts/txt2img.py --prompt "I was eating fried chicken in People's Square
-" --plms --outdir=outputs/txt2img-samples-20240223
+python3 scripts/txt2img.py --prompt "A stylish woman walks down a Tokyo street filled with warm glowing neon and animated city signage. She wears a black leather jacket, a long red dress, and black boots, and carries a black purse. She wears sunglasses and red lipstick. She walks confidently and casually. The street is damp and reflective, creating a mirror effect of the colorful lights. Many pedestrians walk about." --plms --outdir=outputs/txt2img-samples-20240223
 ```
 
 点击“提交作业”，便可以托管了。吃个瓜，等个几分钟，待任务变成完成时，就可以去验收结果了。
 
-![](https://files.mdnice.com/user/44560/c1580763-c20e-4c39-a4dc-bd6033bc6c79.png)
 
-去目标目录查看图片，我们的指令是生成“**我在人民广场吃着炸鸡**”的图片，6 张图片中，只有第 1 张比较合适，图 2 和图 4 比例不协调，而剩下的图内容上并不符合需求。
+![](https://files.mdnice.com/user/44560/df79dc31-414b-428f-98e1-1c9ec434c6e8.png)
 
-![](https://files.mdnice.com/user/44560/7ddf38e9-7dc0-463e-8c51-51b982115762.jpg)
+
+去目标目录查看图片，本次用的是 Sora 宣传视频的那段指令（时尚女人走在东京的街道上），6 张图片整体内容基本符合，但具体细节能力还有很大差距。
+
+
+![](https://files.mdnice.com/user/44560/665da6be-da5e-443f-a00c-1de13f2e48cf.jpg)
+
 
 # 总 结
 
 在有了一次部署经验后，本次仅**半天**时间就完成了 diffusion 的部署和实验，理论上的不断试错产生的账单大概为 **10** 元（实际上免费）。
 
 除了已经熟悉的命令行操作，本次也试用了“**作业提交**”的模式，对 linux 操作的要求进一步降低，也为后期的微调和训练模型做了准备。
+
