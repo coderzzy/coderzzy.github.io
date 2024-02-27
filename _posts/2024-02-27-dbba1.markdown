@@ -8,7 +8,7 @@ css:
   - "assets/markdown.css"
 ---
 
-微信公众号内容地址: 
+微信公众号内容地址: https://mp.weixin.qq.com/s/0V3QX8TeHffPWrxPyEBpOQ
 
 该课程的全名为：数据驱动的商业和行为分析（Data-driven Business and Behavior Analysis，简称 DBBA）。前半部分，主要学习基于<font color='blue'>网络科学</font>的方法论进行**宏观商业分析**；而后半部分，则主要学习基于<font color='blue'>代理模型</font>的方法论进行**微观行为分析**。
 
@@ -155,7 +155,7 @@ print(f'{avg_clustering_coefficient=}')
 与同质性指标相反，异质性指标目的是**分析网络中的节点“差异”有多大**，尤其是关注**中心节点 Hubs**，因而主要是中心节点识别算法。比较常用的如下：
 
   - <font color='blue'>Degree Centrality</font>，根据节点的**度或强度**的大小进行排序。
-  - 异质性衡量，$\kappa = \frac{< k^2 >}{< k > ^2}$，若**该值明显比 1 大，则系统异质性明显**。
+    - 异质性衡量，$\kappa = \frac{< k^2 >}{< k > ^2}$，若**该值明显比 1 大，则系统异质性明显**。
   - <font color='blue'>Closeness Centrality</font>, 计算某节点到其他节点的平均最短路径长度的倒数，即**衡量该节点与其他节点间的距离**。
   - <font color='blue'>Betweenness Centrality</font>，计算网络的所有最短路径里经过该节点的比例，即**衡量该节点在网络中的桥梁作用**。
 
