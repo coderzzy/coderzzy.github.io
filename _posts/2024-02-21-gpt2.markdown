@@ -217,6 +217,21 @@ vi cli_chat_7B.py
 
 ![](https://files.mdnice.com/user/44560/c0aacb5d-c8a1-40b4-b9c4-c4da4764e58b.png)
 
+如果自行安装miniconda3的话，按照下列操作来:
+```
+# 安装 miniconda3
+cp -r /public/software/apps/DeepLearning/whl/Miniconda/Miniconda3-py39_4.10.3-Linux-x86_64.sh ~/
+mkdir -p ~/miniconda3/
+bash Miniconda3-py39_4.10.3-Linux-x86_64.sh -b -f -p "~/miniconda3/"
+rm -rf Miniconda3-py39_4.10.3-Linux-x86_64.sh
+# 配置torch2.1环境
+~/miniconda3/bin/conda create -n torch2.1_dtk23.10_py3.8 python=3.8
+module load compiler/dtk/23.10
+source ~/miniconda3/bin/activate torch2.1_dtk23.10_py3.8
+export LD_LIBRARY_PATH=~/miniconda3/envs/torch2.1_dtk23.10_py3.8/lib:$LD_LIBRARY_PATH
+pip3 install /public/software/apps/DeepLearning/whl/dtk-23.10/pytorch/torch2.1/torch-2.1.0a0+git793d2b5.abi0.dtk2310-cp38-cp38-manylinux2014_x86_64.whl
+```
+
 安装完 python3 和 torch 等环境后，接下来，继续第 4 步。这里原本踩了个坑，花了半小时缓慢运行了一次，才发现没有<font color='red'>测试 torch 版本和 GPU 的匹配性</font>，实际上是因为在使用 CPU 进行运算。
 
 ```
