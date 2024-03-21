@@ -3,7 +3,7 @@ layout: post
 title: 大模型，小探索 —— 还在等 Sora 公测? 先部署个 diffusion
 toc:  true
 author: 小狗屁
-tags: [GPT研究之路]
+tags: [GPT-Explore]
 css:
   - "assets/markdown.css"
 ---

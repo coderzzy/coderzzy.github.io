@@ -3,7 +3,7 @@ layout: post
 title: 大模型，小探索 —— 免费算力? 在“超算互联网”部署大模型
 toc:  true
 author: 小狗屁
-tags: [GPT研究之路]
+tags: [GPT-Explore]
 css:
   - "assets/markdown.css"
 ---

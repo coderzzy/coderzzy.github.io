@@ -3,7 +3,7 @@ layout: post
 title: 大模型，小探索 —— 调用主流语言模型的API
 toc:  true
 author: 小狗屁
-tags: [GPT研究之路]
+tags: [GPT-Explore]
 css:
   - "assets/markdown.css"
 ---
