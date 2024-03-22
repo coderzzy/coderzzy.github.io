@@ -1,0 +1,606 @@
+---
+layout: post
+title: 大模型，小探索 —— 在 16G 的 AMD 上搞微调有多作死？（爬坑篇）
+toc:  true
+author: 小狗屁
+tags: [GPT-Explore]
+css:
+  - "assets/markdown.css"
+---
+
+微信公众号内容地址: 
+
+> 单样本微调流程: 大模型选择 -> 部署和推理 -> 单样本数据集 -> 单样本微调 -> 微调后，部署和推理
+
+继 AMD 微调入坑之后，小狗屁只能继续爬坑。
+
+同样的，先说结论: <font color='red'>在 AMD 上的单样本微调流程跑通了! </font> 虽然坏消息是，在 **Baichuan2**、**ChatGLM3**、**Gemma**、**LLaMA2** 这四个大模型中，仅打通了后 2 个。
+
+# Baichuan2
+
+接上回，解决了 DeepSpeed 和 LoRA 的兼容性问题后，要进一步处理 xFormers。
+
+## xFormers 兼容
+
+https://github.com/ROCm/xformers。
+
+虽然 AMD 官方 fork 了项目，并进行适配，但就目前而言，似乎还并不成熟。同时，再仔细研究微调报错的堆栈，发现是先由 modeling_baichuan.py 中的调用，委托了 xFormers 进行操作，即这是<font color='red'>模型的行为选择，而非必须使用 xFormers</font>。
+
+![](https://files.mdnice.com/user/44560/c751e3b4-eb6d-4c03-ad07-0b8b2342ecce.png)
+
+这就给了两个处理思路: 其一是研究**模型源码**，绕过 xFormers 加速训练的逻辑；其二是这既然是模型的行为选择，那么可以试一试**切换模型**。综合考虑，小狗屁选择方案二，毕竟本身探索路径也是先打通<font color='red'>宏观流程（API 体验-部署-推理-微调-训练）</font>，再研究<font color='red'>算法源码（数据集-模型结构-效果优化）</font>。
+
+## 有用代码总结
+
+边探索边小结，这里先对到目前探索为止，有用的代码进行汇总。
+
+```
+source load_torch2.1_py3.sh
+
+# 微调的环境
+cd LLM/Baichuan2/fine-tune/
+pip3 install -r requirements.txt
+pip3 install peft
+## torch 可能被覆盖，重新安装
+pip3 install /public/software/apps/DeepLearning/whl/dtk-23.10/pytorch/torch2.1/torch-2.1.0a0+git793d2b5.abi0.dtk2310-cp38-cp38-manylinux2014_x86_64.whl
+
+# LLaMA-Factory
+cd ~/LLM
+git clone https://github.com/hiyouga/LLaMA-Factory.git
+cd LLaMA-Factory
+pip3 install -r requirements.txt
+
+# DeepSpeed 兼容性适配
+vi ~/miniconda3/envs/torch2.1_dtk23.10_py3.8/lib/python3.8/site-packages/deepspeed/ops/op_builder/builder.py
+''' 文件内容
+  ...
+def assert_no_cuda_mismatch(name=""):
+    # ROCM 平台，跳过验证
+    if OpBuilder.is_rocm_pytorch():
+        return True
+    cuda_major, cuda_minor = installed_cuda_version(name)
+'''
+
+# LoRA 兼容性适配
+pip3 uninstall bitsandbytes
+pip3 install bitsandbytes==0.38.1
+```
+
+# ChatGLM3
+
+ChatGLM3 是 **智谱 AI** 和 **清华大学** KEG 实验室联合发布的对话预训练模型。
+
+## 部署和推理
+
+```
+cd LLM
+## 1 工程代码和模型文件
+git clone https://github.com/THUDM/ChatGLM3.git
+  ...
+cd ChatGLM3
+mkdir models && cd models
+git clone https://hf-mirror.com/THUDM/chatglm3-6b
+  ...
+cd chatglm3-6b
+# 修改该配置，才能使用本地模型文件进行推理
+# https://github.com/THUDM/ChatGLM3/discussions/894
+vi tokenizer_config.json
+''' 文件内容
+"auto_map": {
+    "AutoTokenizer": [
+      "tokenization_chatglm.ChatGLMTokenizer",
+      null
+    ]
+'''
+# 处理 assert self.padding_side == "left" 的报错
+# https://huggingface.co/THUDM/chatglm2-6b/commit/427d0e2a75958528d4ddd27b849e04fc1f317c75
+vi tokenization_chatglm.py
+''' 文件内容，300 行左右
+  ...
+# assert self.padding_side == "left"
+assert self.padding_side in ["left", "right"]
+  ...
+if needs_to_be_padded:
+    difference = max_length - len(required_input)
+
+    # if "attention_mask" in encoded_inputs:
+    #      encoded_inputs["attention_mask"] = [0] * difference + encoded_inputs["attention_mask"]
+    # if "position_ids" in encoded_inputs:
+    #      encoded_inputs["position_ids"] = [0] * difference + encoded_inputs["position_ids"]
+    # encoded_inputs[self.model_input_names[0]] = [self.pad_token_id] * difference + required_input
+
+    if self.padding_side == "left":
+        if "attention_mask" in encoded_inputs:
+            encoded_inputs["attention_mask"] = [0] * difference + encoded_inputs["attention_mask"]
+        if "position_ids" in encoded_inputs:
+            encoded_inputs["position_ids"] = [0] * difference + encoded_inputs["position_ids"]
+        encoded_inputs[self.model_input_names[0]] = [self.pad_token_id] * difference + required_input
+    else:
+        if "attention_mask" in encoded_inputs:
+            encoded_inputs["attention_mask"] = encoded_inputs["attention_mask"] + [0] * difference
+        if "position_ids" in encoded_inputs:
+            encoded_inputs["position_ids"] = encoded_inputs["position_ids"] + [0] * difference
+        encoded_inputs[self.model_input_names[0]] = required_input + [self.pad_token_id] * difference
+
+return encoded_inputs
+'''
+# 下载模型文件
+wget -O model-00001-of-00007.safetensors --no-check-certificate https://hf-mirror.com/THUDM/chatglm3-6b/resolve/main/model-00001-of-00007.safetensors?download=true
+wget -O model-00002-of-00007.safetensors --no-check-certificate https://hf-mirror.com/THUDM/chatglm3-6b/resolve/main/model-00002-of-00007.safetensors?download=true
+wget -O model-00003-of-00007.safetensors --no-check-certificate https://hf-mirror.com/THUDM/chatglm3-6b/resolve/main/model-00003-of-00007.safetensors?download=true
+wget -O model-00004-of-00007.safetensors --no-check-certificate https://hf-mirror.com/THUDM/chatglm3-6b/resolve/main/model-00004-of-00007.safetensors?download=true
+wget -O model-00005-of-00007.safetensors --no-check-certificate https://hf-mirror.com/THUDM/chatglm3-6b/resolve/main/model-00005-of-00007.safetensors?download=true
+wget -O model-00006-of-00007.safetensors --no-check-certificate https://hf-mirror.com/THUDM/chatglm3-6b/resolve/main/model-00006-of-00007.safetensors?download=true
+wget -O model-00007-of-00007.safetensors --no-check-certificate https://hf-mirror.com/THUDM/chatglm3-6b/resolve/main/model-00007-of-00007.safetensors?download=true
+wget -O pytorch_model-00001-of-00007.bin --no-check-certificate https://hf-mirror.com/THUDM/chatglm3-6b/resolve/main/pytorch_model-00001-of-00007.bin?download=true
+wget -O pytorch_model-00002-of-00007.bin --no-check-certificate https://hf-mirror.com/THUDM/chatglm3-6b/resolve/main/pytorch_model-00002-of-00007.bin?download=true
+wget -O pytorch_model-00003-of-00007.bin --no-check-certificate https://hf-mirror.com/THUDM/chatglm3-6b/resolve/main/pytorch_model-00003-of-00007.bin?download=true
+wget -O pytorch_model-00004-of-00007.bin --no-check-certificate https://hf-mirror.com/THUDM/chatglm3-6b/resolve/main/pytorch_model-00004-of-00007.bin?download=true
+wget -O pytorch_model-00005-of-00007.bin --no-check-certificate https://hf-mirror.com/THUDM/chatglm3-6b/resolve/main/pytorch_model-00005-of-00007.bin?download=true
+wget -O pytorch_model-00006-of-00007.bin --no-check-certificate https://hf-mirror.com/THUDM/chatglm3-6b/resolve/main/pytorch_model-00006-of-00007.bin?download=true
+wget -O pytorch_model-00007-of-00007.bin --no-check-certificate https://hf-mirror.com/THUDM/chatglm3-6b/resolve/main/pytorch_model-00007-of-00007.bin?download=true
+wget -O tokenizer.model --no-check-certificate https://hf-mirror.com/THUDM/chatglm3-6b/resolve/main/tokenizer.model?download=true
+
+## 2 调用模型，实验结果
+# 申请资源，一般核卡比为 8:1
+whichpartition
+  ...
+# salloc -p kshdtest -N 1 -n 8 --gres=dcu:1
+salloc -p ${partition}$ -N 1 -n 8 --gres=dcu:1
+# 查看作业列表，找到节点名
+squeue
+  ...
+# 登录到节点上
+ssh ${node_name}
+# 主指令
+source load_torch2.1_py3.sh
+cd LLM/ChatGLM3
+export MODEL_PATH=./models/chatglm3-6b
+python3 basic_demo/cli_demo.py
+  ...
+exit  # 第一个 exit，登出节点
+exit  # 第二个 exit，退出作业
+```
+
+等待 1-3 分钟，即可进入会话状态。询问之后，大约 1-2 分钟会出现结果。
+
+![](https://files.mdnice.com/user/44560/4a168326-a396-43ab-8a2b-518b62b1dfb2.png)
+
+## 单样本数据集
+
+建立 test.json 的数据集，并且按照 LLaMA-Factory 的格式进行匹配。
+
+```
+vi LLM/LLaMA-Factory/data/dataset_info.json
+''' 文件内容
+  ...
+"test": {
+  "file_name": "test.json",
+  "formatting": "sharegpt",
+  "columns": {
+    "messages": "conversations"
+  },
+  "tags": {
+    "role_tag": "from",
+    "content_tag": "value",
+    "user_tag": "human",
+    "assistant_tag": "gpt"
+  }
+}
+'''
+vi LLM/LLaMA-Factory/data/test.json
+''' 文件内容
+[{
+        "conversations": [
+            {
+                "from": "human",
+                "value": "你好，请问你能帮我查一下明天的天气吗？\n"
+            },
+            {
+                "from": "gpt",
+                "value": "当然，你在哪个城市呢？\n"
+            },
+            {
+                "from": "human",
+                "value": "我在上海。\n"
+            },
+            {
+                "from": "gpt",
+                "value": "好的，根据天气预报，明天上海多云转阴，气温在20到25摄氏度之间。需要我帮你查询其他信息吗？"
+            }
+        ]
+  }]
+'''
+```
+
+## 单样本微调
+
+使用 LLaMA-Factory 进行微调
+
+- **单机单卡**，**LoRA 模式**（基本只有 LoRA、QLoRA 等方案，才能完成 7B 模型的显存消耗小于 16G；Freeze、Full 模式下，一般会爆显）
+- 模型地址、数据集、LoRA 目标、输出地址均设置成可动态改变。
+
+![](https://files.mdnice.com/user/44560/7766487a-b3f0-49c2-bd8e-930eb54efa8c.png)
+
+```
+cd LLM/LLaMA-Factory/
+## 1 指令脚本
+vi sft_single.sh
+''' 文件内容
+# 不使用 DeepSpeed 时，为单机单卡
+CUDA_VISIBLE_DEVICES=0 python3 src/train_bash.py \
+    --stage sft \
+    --do_train \
+    --model_name_or_path $1 \
+    --dataset $2 \
+    --template default \
+    --finetuning_type lora \
+    --lora_target $3 \
+    --output_dir $4 \
+    --overwrite_output_dir \
+    --overwrite_cache \
+    --per_device_train_batch_size 4 \
+    --gradient_accumulation_steps 4 \
+    --lr_scheduler_type cosine \
+    --logging_steps 10 \
+    --save_steps 1000 \
+    --learning_rate 5e-5 \
+    --num_train_epochs 3.0 \
+    --plot_loss \
+    --fp16
+'''
+chmod 764 sft_single.sh
+
+## 2 输出目录
+mkdir outputs
+
+## 3 登远程节点，开始运行
+# 申请资源，一般核卡比为 8:1
+whichpartition
+  ...
+# salloc -p kshdtest -N 1 -n 8 --gres=dcu:1
+salloc -p ${partition} -N 1 -n 8 --gres=dcu:1
+# 查看作业列表，找到节点名
+squeue
+  ...
+# 登录到节点上
+ssh ${node_name}
+# 主指令
+source load_torch2.1_py3.sh
+cd LLM/LLaMA-Factory
+./sft_single.sh ../ChatGLM3/models/chatglm3-6b test query_key_value outputs/sft_output_chatglm3_20240321
+  ...
+exit  # 第一个 exit，登出节点
+exit  # 第二个 exit，退出作业
+```
+
+等待 3-5 分钟，页面开始输出内容。对于本次的单样本来说，从有输出内容开始，大概 3-5 分钟完成了一次微调。其中，从统计数据来看，<font color='red'>完成一次单样本的训练约为 10 秒</font>。
+
+![](https://files.mdnice.com/user/44560/d668d210-d4d5-446d-85e4-9fbd7bdce50b.png)
+
+在 output 文件夹中，可以看到微调的输出文件。
+
+![](https://files.mdnice.com/user/44560/a47a5429-05de-47c4-91bd-39b110b51daa.png)
+
+## 微调后，模型部署和推理
+
+在 adapter_config.json 文件中，<font color='red'>会用 base_model_name_or_path 指向原模型地址</font>。同时，LoRA 模式的微调，加载模型也需要特殊处理。
+
+```
+cd LLM/LLaMA-Factory/outputs/sft_output_chatglm3_20240321/
+## 1 在 adapter_config.json 文件中，确认 base_model_name_or_path 路径正确
+# 该路径是相对于最终执行的 python 脚本的位置，例如 ChatGLM3 同级目录下
+vi adapter_config.json
+''' 文件内容
+{
+  "alpha_pattern": {},
+  "auto_mapping": null,
+  "base_model_name_or_path": "./models/chatglm3-6b",
+  ...
+'''
+
+## 2 使用 peft 加载模型
+cd ../../basic_demo
+cp cli_demo.py cli_demo_lora.py
+vi cli_demo_lora.py
+''' 文件内容
+  ...
+from peft import AutoPeftModelForCausalLM
+  ...
+# model = AutoModel.from_pretrained(MODEL_PATH, trust_remote_code=True, device_map="auto").eval()
+model = AutoPeftModelForCausalLM.from_pretrained(MODEL_PATH, trust_remote_code=True, device_map="auto").eval()
+'''
+
+## 3 调用模型，实验结果
+# 申请资源，一般核卡比为 8:1
+whichpartition
+  ...
+# salloc -p kshdtest -N 1 -n 8 --gres=dcu:1
+salloc -p ${partition}$ -N 1 -n 8 --gres=dcu:1
+# 查看作业列表，找到节点名
+squeue
+  ...
+# 登录到节点上
+ssh ${node_name}
+# 主指令
+source load_torch2.1_py3.sh
+cd LLM/ChatGLM3
+export MODEL_PATH=../LLaMA-Factory/outputs/sft_output_chatglm3_20240321
+python3 basic_demo/cli_demo_lora.py
+  ...
+exit  # 第一个 exit，登出节点
+exit  # 第二个 exit，退出作业
+```
+
+同样等待 1-3 分钟，进入会话状态。但是询问后，会出现似乎更底层的报错 😭。
+
+![](https://files.mdnice.com/user/44560/92e63d89-0a25-4e9b-b69b-c12618143bb5.png)
+
+论坛中似乎也有对应的讨论，而且暂时没有很通用的解决方案，因而暂不处理。
+
+# Gemma
+
+Gemma 是 **Google** 基于 Gemini 技术推出的大型语言模型。
+
+## 部署和推理
+
+```
+cd LLM
+## 1 工程代码和模型文件
+git clone https://github.com/google-deepmind/gemma.git
+  ...
+cd gemma
+mkdir models && cd models
+# https://huggingface.co/google/gemma-2b
+# 模型文件需要在 hugging face 页面发送申请，基本当天很快通过；之后进行下载，上传。
+mkdir gemma-2b
+  ...
+
+## 2 模型推理代码，工程未提供，需要自己手写个。
+cd ..
+vi cli_generate.py
+''' 文件内容
+import argparse
+import torch
+from transformers import AutoTokenizer, AutoModelForCausalLM, set_seed
+from peft import AutoPeftModelForCausalLM
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--seed', type=int, default=0)
+parser.add_argument('--prompt', type=str, default='Hello')
+parser.add_argument('--model_path', type=str, default='')
+parser.add_argument('--use_peft', action="store_true")
+args = parser.parse_args()
+
+seed = args.seed
+prompt = args.prompt
+model_path = args.model_path
+use_peft = args.use_peft
+
+set_seed(seed)  # For reproducibility
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+tokenizer = AutoTokenizer.from_pretrained(model_path)
+model = None
+if use_peft:
+    # torch_dtype=torch.float16
+    # 可以解决微调后推理报错，NotImplementedError: Cannot copy out of meta tensor； no data!
+    model = AutoPeftModelForCausalLM.from_pretrained(model_path, torch_dtype=torch.float16, device_map="auto").eval()
+else:
+    model = AutoModelForCausalLM.from_pretrained(model_path, torch_dtype=torch.float16, device_map="auto").eval()
+inputs = tokenizer(prompt, return_tensors="pt").to(device)
+outputs = model.generate(**inputs, do_sample=True, max_new_tokens=1000)
+result = tokenizer.decode(outputs[0], skip_special_tokens=True)
+print(result)
+'''
+
+## 3 升级 transformers
+# 应对报错: Tokenizer class GemmaTokenizer does not exist or is not currently imported
+cd ~
+source load_torch2.1_py3.sh
+pip3 install transformers==4.38.1
+
+## 4 登远程节点，开始运行
+# 申请资源，一般核卡比为 8:1
+whichpartition
+  ...
+# salloc -p kshdtest -N 1 -n 8 --gres=dcu:1
+salloc -p ${partition} -N 1 -n 8 --gres=dcu:1
+# 查看作业列表，找到节点名
+squeue
+  ...
+# 登录到节点上
+ssh ${node_name}
+# 主指令
+source load_torch2.1_py3.sh
+cd LLM/gemma
+python3 cli_generate.py --seed=0 --prompt=你好 --model_path=./models/gemma-2b
+  ...
+exit  # 第一个 exit，登出节点
+exit  # 第二个 exit，退出作业
+```
+
+等待 1-3 分钟，开始有输出，加载模型。总共约 3-5 分钟，完成输出。
+
+![](https://files.mdnice.com/user/44560/83d30349-0d48-4511-ba2a-fc599e8de42c.png)
+
+从内容来看，2B 的模型，以及可能是中文数据训练不够，目前回答的明显不像个"人" 😂。
+
+
+## 单样例微调
+
+```
+## 登远程节点，开始运行
+# 申请资源，一般核卡比为 8:1
+whichpartition
+  ...
+# salloc -p kshdtest -N 1 -n 8 --gres=dcu:1
+salloc -p ${partition} -N 1 -n 8 --gres=dcu:1
+# 查看作业列表，找到节点名
+squeue
+  ...
+# 登录到节点上
+ssh ${node_name}
+# 主指令
+source load_torch2.1_py3.sh
+cd LLM/LLaMA-Factory
+./sft_single.sh ../gemma/models/gemma-2b test q_proj,v_proj outputs/sft_output_gemma_20240321
+  ...
+exit  # 第一个 exit，登出节点
+exit  # 第二个 exit，退出作业
+```
+
+与之前类似，微调结果正常，耗时也基本一致。
+
+## 微调后，模型部署和推理
+
+```
+## 1 在 adapter_config.json 文件中，确认 base_model_name_or_path 路径正确
+
+## 2 调用模型，实验结果
+# 申请资源，一般核卡比为 8:1
+whichpartition
+  ...
+# salloc -p kshdtest -N 1 -n 8 --gres=dcu:1
+salloc -p ${partition}$ -N 1 -n 8 --gres=dcu:1
+# 查看作业列表，找到节点名
+squeue
+  ...
+# 登录到节点上
+ssh ${node_name}
+# 主指令
+source load_torch2.1_py3.sh
+cd LLM/gemma
+python3 cli_generate.py --seed=0 --prompt=你好 --model_path=../LLaMA-Factory/outputs/sft_output_gemma_20240321 --use_peft
+  ...
+exit  # 第一个 exit，登出节点
+exit  # 第二个 exit，退出作业
+```
+
+相比于微调前，等待 1-3 分钟，开始有输出，加载模型。总共约 3-5 分钟，完成输出。
+
+![](https://files.mdnice.com/user/44560/29d1d971-72d7-43e2-a1f9-c28598107848.png)
+
+由于没有真的用大量相关数据提升效果，以及使用了相同的 seed 值，因此得到了一样的回答结果。但是使用 output 目录下的微调后的模型文件**成功运行**，说明整体流程已打通 😎。
+
+![](https://files.mdnice.com/user/44560/578ff814-090a-4616-91e8-c7c64fa8a8fb.png)
+
+# LLaMA2
+
+LLaMA2 是 **Meta AI** 公司发布的大型语言模型。
+
+## 部署和推理
+
+```
+cd LLM
+## 1 工程代码和模型文件
+git clone https://github.com/meta-llama/llama.git
+  ...
+cd llama
+mkdir models && cd models
+# https://huggingface.co/meta-llama/Llama-2-7b-hf
+# 模型文件需要申请，基本当天很快通；之后进行下载，上传。
+mkdir Llama-2-7b-hf
+...
+
+## 2 模型推理代码，复制 gemma 的即可。
+cd ..
+cp ../gemma/cli_generate.py cli_generate.py
+
+## 3 登远程节点，开始运行
+# 申请资源，一般核卡比为 8:1
+whichpartition
+  ...
+# salloc -p kshdtest -N 1 -n 8 --gres=dcu:1
+salloc -p ${partition} -N 1 -n 8 --gres=dcu:1
+# 查看作业列表，找到节点名
+squeue
+  ...
+# 登录到节点上
+ssh ${node_name}
+# 主指令
+source load_torch2.1_py3.sh
+cd LLM/llama
+python3 cli_generate.py --seed=0 --prompt=你好 --model_path=./models/Llama-2-7b-hf
+  ...
+exit  # 第一个 exit，登出节点
+exit  # 第二个 exit，退出作业
+```
+
+类似的，等待 1-3 分钟，开始有输出，加载模型。总共约 3-5 分钟，完成输出。
+
+![](https://files.mdnice.com/user/44560/f442b66a-9691-41d7-9876-0db18586b169.png)
+
+相比于 Baichuan2、ChatGLM3 等中文大模型，原生的 LLaMA 在中文问答效果上，确实一般 😂。
+
+## 单样例微调
+
+```
+## 登远程节点，开始运行
+# 申请资源，一般核卡比为 8:1
+whichpartition
+  ...
+# salloc -p kshdtest -N 1 -n 8 --gres=dcu:1
+salloc -p ${partition} -N 1 -n 8 --gres=dcu:1
+# 查看作业列表，找到节点名
+squeue
+  ...
+# 登录到节点上
+ssh ${node_name}
+# 主指令
+source load_torch2.1_py3.sh
+cd LLM/LLaMA-Factory
+./sft_single.sh ../llama/models/Llama-2-7b-hf test q_proj,v_proj outputs/sft_output_llama_20240321
+  ...
+exit  # 第一个 exit，登出节点
+exit  # 第二个 exit，退出作业
+```
+
+微调依然是稳如老狗，结果正常，耗时也基本一致。
+
+## 微调后，模型部署和推理
+
+```
+## 1 在 adapter_config.json 文件中，确认 base_model_name_or_path 路径正确
+
+## 2 调用模型，实验结果
+# 申请资源，一般核卡比为 8:1
+whichpartition
+  ...
+# salloc -p kshdtest -N 1 -n 8 --gres=dcu:1
+salloc -p ${partition}$ -N 1 -n 8 --gres=dcu:1
+# 查看作业列表，找到节点名
+squeue
+  ...
+# 登录到节点上
+ssh ${node_name}
+# 主指令
+source load_torch2.1_py3.sh
+cd LLM/llama
+python3 cli_generate.py --seed=0 --prompt=你好 --model_path=../LLaMA-Factory/outputs/sft_output_llama_20240321 --use_peft
+  ...
+exit  # 第一个 exit，登出节点
+exit  # 第二个 exit，退出作业
+```
+
+与 Gemma 类似，微调后的模型得到了相似的输出，即微调流程完成打通 (〃'▽'〃)。
+
+![](https://files.mdnice.com/user/44560/a7f55d48-e00b-4447-962d-14281fe5e9fc.png)
+
+# 总 结
+
+主要面临的困难:
+
+- xFormers 暂时没有较好的 AMD 适配方案。
+
+主要解决方案:
+
+- 曲线救国，尝试 Baichuan2、ChatGLM3、Gemma、LLaMA2 等其他大模型的微调，打通单样本微调流程。
+- 目前为止，<font color='red'>Gemma 和 LLaMA2 已经完整打通</font>，可以用来继续探索；Baichuan2 主要卡在 xFormers 的兼容性问题上，而 ChatGLM3 则是微调后推理出现报错。
+
+下一步计划:
+
+- 实验完成，开始实操。
+  - 在具体<font color='red'>业务场景</font>中，使用数据集进行微调，并验证效果。
+  - 时间优化: 分布式<font color='red'>多卡训练</font>...
+  - <font color='red'>效果对比</font>: 模型、模型参数规模、数据规模...
+- 遗留的两个模型未能打通微调流程，待源码阶段去解决。
