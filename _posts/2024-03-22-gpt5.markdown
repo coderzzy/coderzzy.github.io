@@ -14,7 +14,7 @@ css:
 
 继 AMD 微调入坑之后，小狗屁只能继续爬坑。
 
-同样的，先说结论: <font color='red'>在 AMD 上的单样本微调流程跑通了! </font> 虽然坏消息是，在 **Baichuan2**、**ChatGLM3**、**Gemma**、**LLaMA2** 这四个大模型中，仅打通了后 2 个。
+同样的，先说结论: <font color='red'>在 AMD 上的单样本微调流程跑通了! </font> 而且，在 **Baichuan2**、**ChatGLM3**、**Gemma**、**LLaMA2** 这四个大模型中，后三个均完成跑通。
 
 # Baichuan2
 
@@ -30,7 +30,7 @@ https://github.com/ROCm/xformers。
 
 这就给了两个处理思路: 其一是研究**模型源码**，绕过 xFormers 加速训练的逻辑；其二是这既然是模型的行为选择，那么可以试一试**切换模型**。综合考虑，小狗屁选择方案二，毕竟本身探索路径也是先打通<font color='red'>宏观流程（API 体验-部署-推理-微调-训练）</font>，再研究<font color='red'>算法源码（数据集-模型结构-效果优化）</font>。
 
-## 有用代码总结
+# 有用代码总结
 
 边探索边小结，这里先对到目前探索为止，有用的代码进行汇总。
 
@@ -91,38 +91,6 @@ vi tokenizer_config.json
       "tokenization_chatglm.ChatGLMTokenizer",
       null
     ]
-'''
-# 处理 assert self.padding_side == "left" 的报错
-# https://huggingface.co/THUDM/chatglm2-6b/commit/427d0e2a75958528d4ddd27b849e04fc1f317c75
-vi tokenization_chatglm.py
-''' 文件内容，300 行左右
-  ...
-# assert self.padding_side == "left"
-assert self.padding_side in ["left", "right"]
-  ...
-if needs_to_be_padded:
-    difference = max_length - len(required_input)
-
-    # if "attention_mask" in encoded_inputs:
-    #      encoded_inputs["attention_mask"] = [0] * difference + encoded_inputs["attention_mask"]
-    # if "position_ids" in encoded_inputs:
-    #      encoded_inputs["position_ids"] = [0] * difference + encoded_inputs["position_ids"]
-    # encoded_inputs[self.model_input_names[0]] = [self.pad_token_id] * difference + required_input
-
-    if self.padding_side == "left":
-        if "attention_mask" in encoded_inputs:
-            encoded_inputs["attention_mask"] = [0] * difference + encoded_inputs["attention_mask"]
-        if "position_ids" in encoded_inputs:
-            encoded_inputs["position_ids"] = [0] * difference + encoded_inputs["position_ids"]
-        encoded_inputs[self.model_input_names[0]] = [self.pad_token_id] * difference + required_input
-    else:
-        if "attention_mask" in encoded_inputs:
-            encoded_inputs["attention_mask"] = encoded_inputs["attention_mask"] + [0] * difference
-        if "position_ids" in encoded_inputs:
-            encoded_inputs["position_ids"] = encoded_inputs["position_ids"] + [0] * difference
-        encoded_inputs[self.model_input_names[0]] = required_input + [self.pad_token_id] * difference
-
-return encoded_inputs
 '''
 # 下载模型文件
 wget -O model-00001-of-00007.safetensors --no-check-certificate https://hf-mirror.com/THUDM/chatglm3-6b/resolve/main/model-00001-of-00007.safetensors?download=true
@@ -284,34 +252,25 @@ exit  # 第二个 exit，退出作业
 
 ## 微调后，模型部署和推理
 
-在 adapter_config.json 文件中，<font color='red'>会用 base_model_name_or_path 指向原模型地址</font>。同时，LoRA 模式的微调，加载模型也需要特殊处理。
+微调之后，需要将 LoRA 新增的文件夹和原模型文件进行合并。该操作 LLaMA Factory 也提供了方便的操作。
 
 ```
-cd LLM/LLaMA-Factory/outputs/sft_output_chatglm3_20240321/
-## 1 在 adapter_config.json 文件中，确认 base_model_name_or_path 路径正确
-# 该路径是相对于最终执行的 python 脚本的位置，例如 ChatGLM3 同级目录下
-vi adapter_config.json
+## 1 合并脚本
+cd LLM/LLaMA-Factory
+vi sft_merge.sh
 ''' 文件内容
-{
-  "alpha_pattern": {},
-  "auto_mapping": null,
-  "base_model_name_or_path": "./models/chatglm3-6b",
-  ...
+CUDA_VISIBLE_DEVICES=0 python src/export_model.py \
+    --model_name_or_path $1 \
+    --adapter_name_or_path $2 \
+    --template default \
+    --finetuning_type lora \
+    --export_dir $3 \
+    --export_size 2 \
+    --export_legacy_format False
 '''
+chmod 764 sft_merge.sh
 
-## 2 使用 peft 加载模型
-cd ../../basic_demo
-cp cli_demo.py cli_demo_lora.py
-vi cli_demo_lora.py
-''' 文件内容
-  ...
-from peft import AutoPeftModelForCausalLM
-  ...
-# model = AutoModel.from_pretrained(MODEL_PATH, trust_remote_code=True, device_map="auto").eval()
-model = AutoPeftModelForCausalLM.from_pretrained(MODEL_PATH, trust_remote_code=True, device_map="auto").eval()
-'''
-
-## 3 调用模型，实验结果
+## 2 登节点，进行操作
 # 申请资源，一般核卡比为 8:1
 whichpartition
   ...
@@ -324,19 +283,25 @@ squeue
 ssh ${node_name}
 # 主指令
 source load_torch2.1_py3.sh
-cd LLM/ChatGLM3
-export MODEL_PATH=../LLaMA-Factory/outputs/sft_output_chatglm3_20240321
-python3 basic_demo/cli_demo_lora.py
+# 合并模型
+cd LLM/LLaMA-Factory
+./sft_merge.sh ../ChatGLM3/models/chatglm3-6b ./outputs/sft_output_chatglm3_20240321 ./outputs/sft_merge_output_chatglm3_20240321
+  ...
+# 加载和推理
+cd ../ChatGLM3
+export MODEL_PATH=../LLaMA-Factory/outputs/sft_merge_output_chatglm3_20240321
+python3 basic_demo/cli_demo.py
   ...
 exit  # 第一个 exit，登出节点
 exit  # 第二个 exit，退出作业
 ```
 
-同样等待 1-3 分钟，进入会话状态。但是询问后，会出现似乎更底层的报错 😭。
+其中，合并模型大约需要 3-5 分钟。接着，加载新模型后，同样等待 1-3 分钟，进入会话状态。
 
-![](https://files.mdnice.com/user/44560/92e63d89-0a25-4e9b-b69b-c12618143bb5.png)
+![](https://files.mdnice.com/user/44560/f77cc581-49d4-4028-874d-dbd10eb45611.png)
 
-论坛中似乎也有对应的讨论，而且暂时没有很通用的解决方案，因而暂不处理。
+顺利输出，流程初步完成。
+
 
 # Gemma
 
@@ -382,8 +347,8 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 model = None
 if use_peft:
-    # torch_dtype=torch.float16
-    # 可以解决微调后推理报错，NotImplementedError: Cannot copy out of meta tensor； no data!
+    # 微调后，可以使用 peft 加载 LoRA 微调后的模型。
+    # torch_dtype=torch.float16，该配置可以解决奇怪的推理报错，NotImplementedError: Cannot copy out of meta tensor； no data!
     model = AutoPeftModelForCausalLM.from_pretrained(model_path, torch_dtype=torch.float16, device_map="auto").eval()
 else:
     model = AutoModelForCausalLM.from_pretrained(model_path, torch_dtype=torch.float16, device_map="auto").eval()
@@ -453,8 +418,11 @@ exit  # 第二个 exit，退出作业
 
 ## 微调后，模型部署和推理
 
+LoRA 微调后，除了合并模型，也可以用 peft 方式加载。在 adapter_config.json 文件中，<font color='red'>会用 base_model_name_or_path 指向原模型地址</font>。
+
 ```
 ## 1 在 adapter_config.json 文件中，确认 base_model_name_or_path 路径正确
+# 该路径是相对于最终执行的 python 脚本的位置，例如 gemma 同级目录下
 
 ## 2 调用模型，实验结果
 # 申请资源，一般核卡比为 8:1
@@ -586,6 +554,7 @@ exit  # 第二个 exit，退出作业
 
 ![](https://files.mdnice.com/user/44560/a7f55d48-e00b-4447-962d-14281fe5e9fc.png)
 
+
 # 总 结
 
 主要面临的困难:
@@ -595,7 +564,7 @@ exit  # 第二个 exit，退出作业
 主要解决方案:
 
 - 曲线救国，尝试 Baichuan2、ChatGLM3、Gemma、LLaMA2 等其他大模型的微调，打通单样本微调流程。
-- 目前为止，<font color='red'>Gemma 和 LLaMA2 已经完整打通</font>，可以用来继续探索；Baichuan2 主要卡在 xFormers 的兼容性问题上，而 ChatGLM3 则是微调后推理出现报错。
+- 目前为止，<font color='red'>ChatGLM3、Gemma 和 LLaMA2 已经完整打通</font>，可以用来继续探索；仅有 Baichuan2 主要卡在 xFormers 的兼容性问题上。
 
 下一步计划:
 
@@ -603,4 +572,4 @@ exit  # 第二个 exit，退出作业
   - 在具体<font color='red'>业务场景</font>中，使用数据集进行微调，并验证效果。
   - 时间优化: 分布式<font color='red'>多卡训练</font>...
   - <font color='red'>效果对比</font>: 模型、模型参数规模、数据规模...
-- 遗留的两个模型未能打通微调流程，待源码阶段去解决。
+- 遗留的 Baichuan2 未能打通微调流程，待源码阶段去解决。
