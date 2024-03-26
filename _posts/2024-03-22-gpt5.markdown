@@ -8,7 +8,7 @@ css:
   - "assets/markdown.css"
 ---
 
-微信公众号内容地址: 
+微信公众号内容地址: https://mp.weixin.qq.com/s/_8oiy_wTvYRdIBjdFdIYag
 
 > 单样本微调流程: 大模型选择 -> 部署和推理 -> 单样本数据集 -> 单样本微调 -> 微调后，部署和推理
 
