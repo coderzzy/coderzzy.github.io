@@ -72,3 +72,119 @@ vi LLM/LLaMA-Factory/data/dataset_info.json
 
 同样的操作，可以准备好 telecom_train_400、telecom_train_100、telecom_test_100 等数据集备用（截取数据时需要考虑**数据平衡**，即不同规模的数据集内，各类别的问题数量比例应尽量保持一致）。
 
+# 爬坡阶段
+
+首先，我们选定模型 gemma-2b (参数量相对较少，占用显存少，适合实验)，并且先提问，看模型本身是否已经会了。
+
+```
+## 调用模型，实验结果
+# 申请资源，一般核卡比为 8:1
+whichpartition
+  ...
+# salloc -p kshdtest -N 1 -n 8 --gres=dcu:1
+salloc -p ${partition}$ -N 1 -n 8 --gres=dcu:1
+# 查看作业列表，找到节点名
+squeue
+  ...
+# 登录到节点上
+ssh ${node_name}
+# 主指令
+source load_torch2.1_py3.sh
+cd LLM/LLaMA-Factory
+# Factory 训练，因此也得使用 Factory 推理（保持 template 一致）
+CUDA_VISIBLE_DEVICES=0 python3 src/cli_demo.py --model_name_or_path ../gemma/models/gemma-2b --template default
+  ...
+exit  # 第一个 exit，登出节点
+exit  # 第二个 exit，退出作业
+```
+
+初步看起来，模型本身并不知道怎么回答相关问题。
+
+![](https://files.mdnice.com/user/44560/71cf5bf0-6c41-458a-b971-231804cad0c4.png)
+
+## 调整基本的 LoRA 参数
+
+可以在 LLaMA-Factory/src/llmtuner/hparams/finetuning_args.py 文件中，通过 LoraArguments 查看更多的属性配置。
+
+![](https://files.mdnice.com/user/44560/343cb8ce-1138-487a-990c-0995e5f58c81.png)
+
+具体参数的含义后续会进一步展开，这里先靠直觉设置一些值。
+
+```
+vi LLM/LLaMA-Factory/sft_single.sh
+''' 文件内容
+  ...
+    --finetuning_type lora \
+    --lora_target $3 \
+    --lora_alpha 256 \
+    --lora_rank 128 \
+    --lora_dropout 0.1 \
+    --loraplus_lr_ratio 1.0 \
+    --loraplus_lr_embedding 1e-6 \
+    --use_rslora \
+    --use_dora \
+    --create_new_adapter \
+    --per_device_train_batch_size 8 \
+    --gradient_accumulation_steps 8 \
+    --lr_scheduler_type cosine \
+    --learning_rate 5e-5 \
+    --num_train_epochs 5.0 \
+  ...
+'''
+```
+
+## 微调，400 样本
+
+先使用少量 400 条数据进行尝试，看是否有效。
+
+```
+## 登远程节点，开始运行
+# 申请资源，一般核卡比为 8:1
+whichpartition
+  ...
+# salloc -p kshdtest -N 1 -n 8 --gres=dcu:1
+salloc -p ${partition} -N 1 -n 8 --gres=dcu:1
+# 查看作业列表，找到节点名
+squeue
+  ...
+# 登录到节点上
+ssh ${node_name}
+# 主指令
+source load_torch2.1_py3.sh
+cd LLM/LLaMA-Factory
+# 微调
+./sft_single.sh ../gemma/models/gemma-2b telecom_train_400 q_proj,v_proj,k_proj outputs/sft_output_gemma_20240328
+  ...
+# 查看文件大小
+du -sh outputs/*
+# 推理
+CUDA_VISIBLE_DEVICES=0 python3 src/cli_demo.py --model_name_or_path ../gemma/models/gemma-2b --adapter_name_or_path outputs/sft_output_gemma_20240328 --template default --finetuning_type lora
+  ...
+exit  # 第一个 exit，登出节点
+exit  # 第二个 exit，退出作业
+```
+
+微调过程如下，主要可以看出以下数据:
+
+- 模型训练的参数约为 **2000w**，约为<font color='red'>总参数量的 1%</font>。
+- 从 **loss 值**来看，最后一次约为 0.6，直觉上来看，仍然较大，有提升空间。
+- 每秒训练的样本数约为 8 个，所以总训练时长约为 400 \* 5 epoch / 8 = 250 秒，即 4 分钟。可以推断，在不考虑分布式的情况下，完整训练 5000 个样本约需要 50 分钟。
+
+![](https://files.mdnice.com/user/44560/a85e4288-cd4b-4c09-9764-c31207aecc23.png)
+
+对微调后的模型进行提问，结果如下。看起来，模型已经<font color='red'>有所"进步"</font>。
+
+![](https://files.mdnice.com/user/44560/d0128763-0977-4b83-8580-7f45fe32952f.png)
+
+## 微调，5000 样本
+
+其余操作均不变，使用 telecom_train_5000 进行微调，总共约耗时 40 分钟完成。
+
+查看 loss 值曲线，最低达到 **0.3** 左右，较之前有更多提升。
+
+![](https://files.mdnice.com/user/44560/7dbc3014-1c34-405b-9830-48c9e14ce361.png)
+
+进行提问，效果进一步提升，虽然具体的数字没有答对 😂，但总的来说，爬坡已完成。
+
+![](https://files.mdnice.com/user/44560/048bbbf7-062c-4072-aa9f-4c469c3572c9.png)
+
