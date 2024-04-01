@@ -8,7 +8,7 @@ css:
   - "assets/markdown.css"
 ---
 
-微信公众号内容地址: 
+微信公众号内容地址: https://mp.weixin.qq.com/s/Z6FQgXX25Dc9B7DzsT1iRA
 
 > 微调实操: 数据集、超参数、模型结构，和评测指标。
 
