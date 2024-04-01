@@ -188,3 +188,167 @@ exit  # 第二个 exit，退出作业
 
 ![](https://files.mdnice.com/user/44560/048bbbf7-062c-4072-aa9f-4c469c3572c9.png)
 
+# 调参阶段
+
+接下来，便是调参了。
+
+首先，需要量化评测指标，一方面是用更多的客观评价维度来代替人的主观判断；另一方面也有利于自动化，提高调参效率。
+
+## 量化评测指标
+
+```
+## 1 安装环境
+source load_torch2.1_py3.sh
+pip3 install nltk jieba rouge-chinese jsonlines
+
+## 2 预测脚本，同时计算 BLEU 和 ROUGE
+vi LLM/LLaMA-Factory/predict_single.sh
+''' 文件内容
+CUDA_VISIBLE_DEVICES=0 python3 src/train_bash.py \
+    --stage sft \
+    --do_predict \
+    --model_name_or_path $1 \
+    --adapter_name_or_path $2 \
+    --dataset $3 \
+    --template default \
+    --finetuning_type lora \
+    --output_dir $4 \
+    --overwrite_output_dir \
+    --per_device_eval_batch_size 1 \
+    --max_samples 150 \
+    --predict_with_generate \
+    --fp16
+'''
+chmod 764 LLM/LLaMA-Factory/predict_single.sh
+
+## 3 评测脚本，精准率和召回率
+vi LLM/LLaMA-Factory/predict_acc_rate.py
+''' 文件内容
+# -*- coding: utf-8 -*-
+import jsonlines
+import pandas as pd
+import sys
+# 获取命令行参数
+if len(sys.argv) != 2:
+    print("Usage: python python.py path_to_jsonl_file")
+    sys.exit(1)
+jsonl_path = sys.argv[1]
+# 读取 JSONL 文件并转换为 DataFrame
+data = []
+with jsonlines.open(jsonl_path, 'r') as reader:
+    for line in reader:
+        data.append(line)
+df = pd.DataFrame(data)
+# 1. 新增一列“check”
+df['check'] = (df['label'] == df['predict']).astype(int)
+# 统计check等于1的占比
+check_percentage = (df['check'] == 1).mean()
+print("check等于1的占比：", check_percentage)
+# 2. 新增一列“long answer”
+df['long_answer'] = (df['label'].apply(len) > 10).astype(int)
+# 统计在label等于1的样本中check等于1的占比
+check_percentage_in_long_answer = df[df['long_answer'] == 1]['check'].mean()
+print("在label等于1的样本中check等于1的占比：", check_percentage_in_long_answer)
+'''
+
+## 4 登远程节点，进行测试
+# 申请资源，一般核卡比为 8:1
+whichpartition
+  ...
+# salloc -p kshdtest -N 1 -n 8 --gres=dcu:1
+salloc -p ${partition} -N 1 -n 8 --gres=dcu:1
+# 查看作业列表，找到节点名
+squeue
+  ...
+# 登录到节点上
+ssh ${node_name}
+# 主指令
+source load_torch2.1_py3.sh
+cd LLM/LLaMA-Factory
+# 训练集上预测
+./predict_single.sh ../gemma/models/gemma-2b outputs/sft_output_gemma_20240328 telecom_train_100 outputs/sft_predict_train_output_gemma_20240328
+  ...
+# 训练集的评测
+python3 predict_acc_rate.py outputs/sft_predict_train_output_gemma_20240328/generated_predictions.jsonl
+  ...
+# 测试集上预测
+./predict_single.sh ../gemma/models/gemma-2b outputs/sft_output_gemma_20240328 telecom_test_100 outputs/sft_predict_test_output_gemma_20240328
+  ...
+# 测试集的评测
+python3 predict_acc_rate.py outputs/sft_predict_test_output_gemma_20240328/generated_predictions.jsonl
+  ...
+exit  # 第一个 exit，登出节点
+exit  # 第二个 exit，退出作业
+```
+
+对 BLEU 和 ROUGE 的计算，有如下示例。简单来说，BLEU 类似于精确率，以模型结果中的总数量为分母，<font color='red'>希望模型答的尽可能的对</font>；ROUGE 类似于召回率，以参考结果中的总数量为分母，<font color='red'>希望模型答的尽可能的全</font>。
+
+![](https://files.mdnice.com/user/44560/fd3870be-fda7-42c1-9961-5289702fdab0.png)
+
+相关指标以及数据结果如下表所示:
+
+| 指标          | 指标含义                                                                                                       | 值-训练集/% | 值-测试集/% |
+| ------------- | -------------------------------------------------------------------------------------------------------------- | ----------- | ----------- |
+| BLEU-4        | 对每个样本，将模型结果和标签按 4-gram 拆分后，计算精确率（**模型结果为分母**，命中值为分子）；所有样本取平均。 | 49.43       | 53.58       |
+| ROUGE-1       | 对每个样本，将模型结果和标签按 1-gram 拆分后，计算召回率（**标签为分母**，命中值为分子）；所有样本取平均。     | 63.56       | 62.76       |
+| ROUGE-2       | 对每个样本，将模型结果和标签按 2-gram 拆分后，计算召回率（**标签为分母**，命中值为分子）；所有样本取平均。     | 46.37       | 51.98       |
+| ROUGE-L       | 类似的，考虑最长公共子序列，后进行计算。                                                                       | 59.19       | 59.73       |
+| 准确率 Acc    | 对所有样本，不以 n-gram 进行拆分，考虑**完全一致**，计算准确率。                                               | 19          | 24          |
+| 召回率 Recall | 对所有样本，不以 n-gram 进行拆分，考虑**完全一致**，计算召回率。                                               | 13.79       | 21.74       |
+
+在本次任务中，选择考虑**完全一致**的 Acc 和考虑**覆盖性**的 ROUGE-1 作为评判标准，进行调参。
+
+## LoRA 参数理解
+
+LoRA（Low-Rank Adaptation of Large Language Models），微软研发的低秩自适应技术，旨在用两个低秩矩阵替代待更新的权重矩阵的增量。相当于在冻结原模型参数的情况下，<font color='red'>只训练新增的网络层参数</font>，进而大大减小微调的成本。
+
+![](https://files.mdnice.com/user/44560/26ab4dc8-e1a5-43bb-8e0c-257e661f0343.png)
+
+相关的参数包括:
+
+- additional_target: 除了 LoRA 层之外（即除了两个低秩矩阵），要设置为可训练并保存在最终检查点中的模块名称。
+- lora_alpha: 矩阵的标定因子，值越大，更新权重越积极；<font color='red'>一般建议为 lora_rank 的 2 倍</font>。
+- lora_rank: 矩阵的秩，一般为 32、128、256。
+- lora_dropout: dropout 率，以防止过拟合，增强泛化能力。
+- loraplus_lr_ratio: 学习率比率（lr_B / lr_A）。
+- loraplus_lr_embedding: LoRA 嵌入层的学习率。
+- use_rslora: 是否使用<font color='red'>秩稳定</font>的 LoRA，即 rsLoRA（缩放因子 $\gamma = \frac{\alpha}{\sqrt{r}}$）。
+- use_dora: 是否使用<font color='red'>权重分解</font>的 LoRA 方法（DoRA）。
+- create_new_adapter: 是否创建一个具有<font color='red'>随机初始化权重</font>的新适配器。
+- lora_traget: 用于指定应用 LoRA 的<font color='red'>目标模块</font>的名称。
+  - 使用 "all" 表示应用于所有线性模块。
+  - LLaMA: ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
+  - ChatGLM: ["query_key_value", "dense", "dense_h_to_4h", "dense_4h_to_h"]
+  - Baichuan: ["W_pack", "o_proj", "gate_proj", "up_proj", "down_proj"]
+  - ...
+
+## 实验报告
+
+![](https://files.mdnice.com/user/44560/81870b01-7aea-4897-9747-a51e22009841.png)
+
+总的来说，经历了以上实验，在运营商知识数据集微调的场景下，有以下结论:
+
+- lora_alpha、lora_rank、lora_target 和 use_rslora 这四个参数对模型结果影响明显
+  - lora_alpha 建议为 lora_rank 的 2 倍，<font color='red'>lora_rank 的最优值目前为 256</font>。
+  - lora_target，目前结论为 <font color='red'>qkvo > qkv = qv</font>。
+  - use_rslora，即<font color='red'>秩稳定的 LoRA，开启后正向效果明显</font>。
+- 模型训练参数、训练后 adapter 的大小，跟 lora_alpha、lora_rank、lora_target 和 use_dora 有关。
+
+目前的最优配置为:
+
+```
+lora_alpha: 512
+lora_rank: 256
+lora_dropout: 0.0
+lora_target: q_proj, k_proj, v_proj, o_proj
+loraplus_lr_ratio: 1.0
+loraplus_lr_embedding: 1e-6
+use_rslora: True
+use_dora: True
+create_new_adapter: True
+```
+
+使用该配置训练出来的模型，再次回答之前的问题，目前已经<font color='red'>完全回答正确</font> ✌🏻。
+
+![](https://files.mdnice.com/user/44560/1636bfde-90ab-4c64-bd41-0614cbaf1939.png)
+
