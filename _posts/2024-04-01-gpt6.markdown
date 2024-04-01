@@ -352,3 +352,44 @@ create_new_adapter: True
 
 ![](https://files.mdnice.com/user/44560/1636bfde-90ab-4c64-bd41-0614cbaf1939.png)
 
+# 对比阶段
+
+使用相同的配置，训练 ChatGLM3，可以得到以下对比表格:
+
+| 模型               | gemma-2b              | ChatGLM3-6b           |
+| ------------------ | --------------------- | --------------------- |
+| 训练时长           | 45 分钟(batch_size=8) | 75 分钟(batch_size=2) |
+| 可训练模型参数     | 59,065,344            | 62,519,296            |
+| train_loss         | 0.03                  | 0.01                  |
+| 模型大小           | 230M                  | 240M                  |
+| train_data_acc     | 82%                   | 94%                   |
+| train_data_rouge_1 | 97.3%                 | 99.2%                 |
+| test_data_acc      | 43%                   | 49%                   |
+| test_data_rouge_1  | 77.6%                 | 79.4%                 |
+
+可以看出，<font color='red'>ChatGLM3 还是在各指标上都取得了领先的</font>。同时，也可以运行并看一次具体的推理，它也正确回答了问题。
+
+![](https://files.mdnice.com/user/44560/f75c1263-a4f7-4e8a-b423-63037d7652f7.png)
+
+然而好景不长，当测试模型的通用能力的时候，会发现如下输出 😭！
+
+![](https://files.mdnice.com/user/44560/687d921a-d82a-4856-aa7f-c01287687c39.png)
+
+属于是遗忘式学习了，<font color='red'>专业能力提升了，模型的通用能力却下降了</font>。有待于进一步研究**混合数据训练**等方案，同时兼顾两者了。
+
+![](https://files.mdnice.com/user/44560/dc157a4e-500c-44ef-aa46-df617caa5213.png)
+
+至于另一个模型，LLaMA-7b，很不幸，<font color='red'>爆显</font>了 😂。有待于进一步研究**分布式微调**，来实现时间和空间上的优化了。
+
+# 总 结
+
+主要完成:
+
+- 使用**运营商知识数据集**，对 gemma-2b 模型进行微调，并调参至更优。
+- 使用相似的配置，对 ChatGLM3 进行微调，并进行对比。
+
+待探索:
+
+- **分布式多卡微调**，解决 LLaMA-7b 的训练爆显的问题。
+- **混合数据训练**，解决微调过拟合——通用能力下降的问题。
+- Baichuan2 的微调。
