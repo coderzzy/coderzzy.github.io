@@ -8,7 +8,7 @@ css:
   - "assets/markdown.css"
 ---
 
-微信公众号内容地址:
+微信公众号内容地址: https://mp.weixin.qq.com/s/NHRTEBYb29hLnoaiNZPFpg
 
 > AI 协同的三种模式: **Embedding 嵌入**、**Copilot 副手** 和 **Agent 智能体**。
 
