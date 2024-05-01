@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 大模型，小探索 —— 在 16G 的 AMD 上搞微调有多作死？（出坑篇）
+title: 大模型，小探索 —— AI 帮写个飞书插件，赚个"零花钱" ^_^
 toc:  true
 author: 小狗屁
 tags: [GPT-Explore]
