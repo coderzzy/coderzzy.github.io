@@ -24,9 +24,9 @@ layout: default
 
 {% comment %} Show posts by taxonomy {% endcomment %}
 {%- for taxonomy in taxonomies -%}
-  <h2 id="{{ taxonomy.name }}">
+  <h3 id="{{ taxonomy.name }}">
     {{ taxonomy.name }}
-  </h2>
+  </h3>
   <ul class="post-list-by-taxonomy">
     {%- assign posts = taxonomy.items -%}
     {%- for post in posts -%}
