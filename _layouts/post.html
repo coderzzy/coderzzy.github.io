@@ -9,7 +9,7 @@ layout: default
       <link rel="stylesheet" href="{{ css | relative_url }}">
     {% endfor %}
   {% endif %}
-  <div class="post-meta">
+  <div style="margin-top: 1em;" class="post-meta">
     {%- assign date_format = site.date_format | default: "%-d %b %Y" -%}
     <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: date_format }}</time>
     {%- if page.last_modified_at -%}
