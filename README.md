@@ -1,4 +1,4 @@
-# Zzy的博客页
+# React项目模版
 
 ## 项目结构
 - 项目框架
@@ -9,8 +9,6 @@
     - customize-cra && react-app-rewired
 - css样式拓展
     - less
-- 组件库: 
-     - Ant Design
 - ...
 
 ## 项目运行
