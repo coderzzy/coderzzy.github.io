@@ -1,7 +1,16 @@
-## Zzy的博客页
+# Zzy的博客页
 
-- React
-- Ant Design
+## 项目结构
+- 项目框架
+    - React && Typescript
+- github的部署相关
+    - gh-pages
+- webpack配置相关
+    - customize-cra && react-app-rewired
+- css样式拓展
+    - less
+- 组件库: 
+     - Ant Design
 - ...
 
 ## 项目运行

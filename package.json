@@ -11,11 +11,10 @@
     "react-scripts": "5.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "deploy": "react-scripts build && gh-pages -d build",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "deploy": "react-app-rewired build && gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -36,6 +35,11 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^6.2.0"
+    "@types/customize-cra": "^1.0.8",
+    "customize-cra": "^1.0.0",
+    "gh-pages": "^6.2.0",
+    "less": "^4.1.1",
+    "less-loader": "^7.3.0",
+    "react-app-rewired": "^2.2.1"
   }
 }
