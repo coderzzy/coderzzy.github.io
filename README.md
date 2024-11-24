@@ -11,7 +11,8 @@
     - less
 - 组件库: 
      - Ant Design
-- ...
+- Markdown渲染
+    - react-markdown
 
 ## 项目运行
 ### 项目启动

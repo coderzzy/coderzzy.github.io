@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './App.module.less'
+import BlogRender from './components/BlogRender'
 
 interface AppProps {
   // props
@@ -8,7 +9,7 @@ interface AppProps {
 const App: React.FC<AppProps> = ({ }) => {
   return (
     <div className={styles.appWrapper}>
-      <h1>Hello World!</h1>
+      {/* <BlogRender /> */}
     </div>
   );
 }
