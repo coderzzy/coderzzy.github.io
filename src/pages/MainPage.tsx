@@ -17,7 +17,7 @@ const MainPage: React.FC<MainPageProps> = ({ }) => {
             <Content>
                 <div className={styles.backgroundImageContainer}>
                     <div className={styles.overlay}></div>
-                    <div className={styles.backgroundText}>小刀需磨，方才不钝</div>
+                    <div className={styles.backgroundText}>小刀需磨<br />方才不钝</div>
                 </div>
             </Content>
         </Layout>
