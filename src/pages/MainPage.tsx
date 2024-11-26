@@ -1,5 +1,6 @@
 import React from 'react';
-import { Layout, Menu, theme } from 'antd';
+import styles from './MainPage.module.less'
+import { Layout, Image } from 'antd';
 
 const { Header, Content, Sider } = Layout;
 
@@ -13,6 +14,11 @@ const MainPage: React.FC<MainPageProps> = ({ }) => {
             <Header style={{ display: 'flex', alignItems: 'center' }}>
                 <div style={{ marginInlineStart: 24, fontSize: 24 }}>张小刀的杂文</div>
             </Header>
+            <Content>
+                <div className={styles.background}>
+                    
+                </div>
+            </Content>
         </Layout>
     );
 }
