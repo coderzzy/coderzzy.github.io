@@ -1,14 +1,13 @@
 {
   "files": {
-    "main.css": "/static/css/main.f8689fba.css",
-    "main.js": "/static/js/main.449cd0f5.js",
-    "static/media/background_edinburgh.jpg": "/static/media/background_edinburgh.5f265a70c71cf274cdb2.jpg",
+    "main.css": "/static/css/main.aae5dde6.css",
+    "main.js": "/static/js/main.d7509226.js",
     "index.html": "/index.html",
-    "main.f8689fba.css.map": "/static/css/main.f8689fba.css.map",
-    "main.449cd0f5.js.map": "/static/js/main.449cd0f5.js.map"
+    "main.aae5dde6.css.map": "/static/css/main.aae5dde6.css.map",
+    "main.d7509226.js.map": "/static/js/main.d7509226.js.map"
   },
   "entrypoints": [
-    "static/css/main.f8689fba.css",
-    "static/js/main.449cd0f5.js"
+    "static/css/main.aae5dde6.css",
+    "static/js/main.d7509226.js"
   ]
 }
