@@ -5,11 +5,12 @@
 .backgroundImageContainer {
     position: relative;
     width: 100%;
-    height: 60vh;
-    background-image: url('/public/images/background_edinburgh.jpg');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
+    height: 50vh;
+    background: linear-gradient(to right, #5ffff4, #feb47b);
+    // background-image: url('/public/images/background_edinburgh.jpg');
+    // background-repeat: no-repeat;
+    // background-size: contain;
+    // background-position: center;
 
     /* 半透明遮罩层 */
     .overlay {
@@ -18,7 +19,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.141);
+        background-color: #000000b4;
         /* 保证遮罩层在图片上方 */
         z-index: 1;
     }
@@ -32,9 +33,9 @@
         left: 50%;
         transform: translate(-50%, -50%);
         color: white;
-        font-size: 50px;
+        font-size: 2rem;
         font-weight: bold;
         /* 文字投影效果 */
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        text-shadow: 10px 10px 10px rgba(0, 0, 0, 0.7);
     }
 }
