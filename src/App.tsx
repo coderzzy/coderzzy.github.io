@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
-import { blue } from '@ant-design/colors';
+import { useGlobalContext } from './context/GlobalContext'
 import MainPage from './pages/MainPage'
 
 
@@ -10,16 +10,18 @@ interface AppProps {
 }
 
 const App: React.FC<AppProps> = ({ }) => {
+  const { colorTextBase } = useGlobalContext();
+
   return (
     <ConfigProvider theme={{
       token: {
         // Seed Token，影响范围大
-        colorPrimary: blue.primary,
-        colorTextBase: "white",
+        // colorPrimary: colorPrimary,
+        colorTextBase: colorTextBase,
         borderRadius: 2,
 
         // 派生变量，影响范围小
-        colorBgContainer: '#f6ffed',
+        // colorBgContainer: '#f6ffed',
       },
     }}>
       <BrowserRouter>
@@ -28,7 +30,6 @@ const App: React.FC<AppProps> = ({ }) => {
         </Routes>
       </BrowserRouter>
     </ConfigProvider>
-
   );
 }
 

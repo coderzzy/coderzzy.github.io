@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './MainPage.module.less'
 import { Layout, Card } from 'antd';
+import GlobalHeader from '../components/GlobalHeader'
 import BlogList from '../components/BlogList'
 
 const { Header, Content, Sider } = Layout;
@@ -13,7 +14,7 @@ const MainPage: React.FC<MainPageProps> = ({ }) => {
     return (
         <Layout>
             <Header style={{ display: 'flex', alignItems: 'center' }}>
-                <div style={{ marginInlineStart: 24, fontSize: '1.5rem' }}>张小刀的杂文</div>
+                <GlobalHeader />
             </Header>
             <Content>
                 <div className={styles.brandContainer}>
