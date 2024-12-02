@@ -21,13 +21,6 @@ const MainPage: React.FC<MainPageProps> = ({ }) => {
                     <div className={styles.overlay}></div>
                     <div className={styles.brandText}>小刀需磨<br />方才不钝</div>
                 </div>
-                {/* <div className={styles.profileContainer}>
-                    <Card style={{ marginTop: 10, width: 300, borderRadius: 10, backgroundColor: 'white', color: 'black' }}>
-                        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                            <p>1111</p>
-                        </div>
-                    </Card>
-                </div> */}
                 <div className={styles.blogListContainer}>
                     <BlogList />
                 </div>

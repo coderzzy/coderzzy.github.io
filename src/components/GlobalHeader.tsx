@@ -12,7 +12,6 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({ }) => {
     return (
         <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ marginInlineStart: 24, fontSize: '1.5rem' }}>张小刀的杂文</div>
-            <ColorPicker showText value={colorTextBase} onChange={(color) => setColorTextBase(color.toHexString())} />
         </div>
     );
 }
