@@ -5,17 +5,12 @@
   "private": true,
   "dependencies": {
     "@dhdbstjr98/gif.js": "^1.0.2",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
     "antd": "^5.22.2",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.49",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-markdown": "^9.0.1",
     "react-router-dom": "^7.0.1",
-    "react-scripts": "5.0.1",
-    "tailwindcss": "^3.4.16"
+    "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "react-app-rewired start",
@@ -43,7 +38,8 @@
   },
   "devDependencies": {
     "@types/customize-cra": "^1.0.8",
-    "@types/gif.js": "^0.2.5",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
     "customize-cra": "^1.0.0",
     "gh-pages": "^6.2.0",
     "less": "^4.1.1",

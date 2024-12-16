@@ -16,20 +16,10 @@ module.exports = override(
             modifyVars: {}, //修改 Less 变量
         }
     }),
-    // adjustStyleLoaders(({ use: [, , postcss] }) => {
-    //     const postcssOptions = postcss.options;
-    //     postcss.options = { postcssOptions };
-    // }),
     adjustStyleLoaders(({ use: [, , postcss] }) => {
-        if (postcss) {
-          postcss.options.postcssOptions = {
-            plugins: [
-              require('tailwindcss'),
-              require('autoprefixer'),
-            ],
-          };
-        }
-      })
+        const postcssOptions = postcss.options;
+        postcss.options = { postcssOptions };
+    }),
     // addPostcssPlugins([
     //     require('tailwindcss'),
     //     require('autoprefixer'),
