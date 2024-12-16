@@ -3,3 +3,6 @@ declare module '*.less' {
     const classes: { [key: string]: string };
     export default classes;
 }
+
+// 其他
+declare module '@dhdbstjr98/gif.js'

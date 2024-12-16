@@ -3,7 +3,8 @@ const {
     override,
     addLessLoader,
     addWebpackModuleRule,
-    adjustStyleLoaders
+    adjustStyleLoaders,
+    addPostcssPlugins
 } = require('customize-cra')
 
 module.exports = override(
@@ -15,10 +16,14 @@ module.exports = override(
             modifyVars: {}, //修改 Less 变量
         }
     }),
-    adjustStyleLoaders(({ use: [, , postcss] }) => {
-        const postcssOptions = postcss.options;
-        postcss.options = { postcssOptions };
-    }),
+    // adjustStyleLoaders(({ use: [, , postcss] }) => {
+    //     const postcssOptions = postcss.options;
+    //     postcss.options = { postcssOptions };
+    // }),
+    addPostcssPlugins([
+        require('tailwindcss'),
+        require('autoprefixer'),
+    ]),
     // addWebpackModuleRule({
     //     test: /\.module\.less$/,
     //     exclude: /node_modules/,

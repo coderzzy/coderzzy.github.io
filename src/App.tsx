@@ -5,6 +5,7 @@ import { gray } from '@ant-design/colors';
 import { useGlobalContext } from './context/GlobalContext'
 import MainPage from './pages/MainPage'
 import BlogPage from './pages/BlogPage'
+import ToolPage from './pages/ToolPage'
 
 
 interface AppProps {
@@ -30,6 +31,7 @@ const App: React.FC<AppProps> = ({ }) => {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/blog" element={<BlogPage />} />
+          <Route path="/tools" element={<ToolPage />} />
         </Routes>
       </BrowserRouter>
     </ConfigProvider>
