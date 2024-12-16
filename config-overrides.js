@@ -20,10 +20,10 @@ module.exports = override(
         const postcssOptions = postcss.options;
         postcss.options = { postcssOptions };
     }),
-    // addPostcssPlugins([
-    //     require('tailwindcss'),
-    //     require('autoprefixer'),
-    // ]),
+    addPostcssPlugins([
+        require('tailwindcss'),
+        require('autoprefixer'),
+    ]),
     // addWebpackModuleRule({
     //     test: /\.module\.less$/,
     //     exclude: /node_modules/,
