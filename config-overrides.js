@@ -16,14 +16,14 @@ module.exports = override(
             modifyVars: {}, //修改 Less 变量
         }
     }),
-    adjustStyleLoaders(({ use: [, , postcss] }) => {
-        const postcssOptions = postcss.options;
-        postcss.options = { postcssOptions };
-    }),
     addPostcssPlugins([
         require('tailwindcss'),
         require('autoprefixer'),
     ]),
+    adjustStyleLoaders(({ use: [, , postcss] }) => {
+        const postcssOptions = postcss.options;
+        postcss.options = { postcssOptions };
+    }),
     // addWebpackModuleRule({
     //     test: /\.module\.less$/,
     //     exclude: /node_modules/,
