@@ -20,7 +20,7 @@
 npm install && npm start 
 ```
 
-### 部署
+### 部署 
 ```
 npm run deploy
 ```
