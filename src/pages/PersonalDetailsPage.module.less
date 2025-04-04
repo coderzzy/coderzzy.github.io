@@ -1,10 +1,93 @@
 .layout {
-    min-height: 100vh;
-    background: #f8f9fa;
+  min-height: 100vh;
+  background-color: #f4f6f8; /* 更改背景颜色 */
 }
 
 .content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px;
+  padding: 48px; /* 增加内容区域的内边距 */
+}
+
+.card {
+  background-color: #fff;
+  padding: 48px;
+  border-radius: 16px; /* 增大圆角半径 */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* 增强阴影效果 */
+  transition: transform 0.3s ease; /* 添加过渡效果 */
+
+  &:hover {
+    transform: translateY(-5px); /* 鼠标悬停时卡片上移 */
+  }
+}
+
+.title {
+  font-size: 36px; /* 增大标题字体大小 */
+  margin-bottom: 24px;
+  color: #333;
+}
+
+.name {
+  font-size: 28px; /* 增大姓名字体大小 */
+  margin-bottom: 16px;
+  color: #555;
+}
+
+.slogan {
+  font-size: 20px; /* 增大标语字体大小 */
+  margin-bottom: 32px;
+  color: #777;
+}
+
+.subtitle {
+  font-size: 24px; /* 增大副标题字体大小 */
+  margin-bottom: 16px;
+  color: #333;
+  border-bottom: 1px solid #eee; /* 添加下划线 */
+  padding-bottom: 8px;
+}
+
+.list {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 32px;
+}
+
+.list li {
+  margin-bottom: 16px;
+}
+
+.link {
+  font-size: 20px; /* 增大链接字体大小 */
+  color: #1890ff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #40a9ff; /* 鼠标悬停时链接颜色变化 */
+  }
+}
+
+.socialMediaItem {
+  display: flex;
+  align-items: center;
+}
+
+.socialMediaText {
+  font-size: 20px; /* 增大社交媒体文字字体大小 */
+  margin-right: 16px;
+}
+
+.socialMediaQrCode {
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.projectItem {
+  font-size: 20px; /* 增大项目字体大小 */
+  color: #555;
 }
