@@ -6,6 +6,16 @@ const {
     adjustStyleLoaders,
 } = require('customize-cra')
 
+// 自定义 Webpack 配置函数
+const customWebpackConfig = (config) => {
+    config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false
+    };
+    return config;
+};
+
 module.exports = override(
     //addLessLoader 函数用于在 Webpack 配置中添加 Less 支持
     addLessLoader({
@@ -27,6 +37,8 @@ module.exports = override(
             }
         };
     }),
+    // 应用自定义 Webpack 配置
+    customWebpackConfig
     // addWebpackModuleRule({
     //     test: /\.module\.less$/,
     //     exclude: /node_modules/,

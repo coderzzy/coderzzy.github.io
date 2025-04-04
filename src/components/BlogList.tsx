@@ -1,10 +1,8 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { List } from 'antd';
-import { metaInfo } from '../data/BlogMetaInfo'
+import React from 'react';
+import { metaInfo } from '../data/BlogMetaInfo';
 
 const BlogList: React.FC = () => {
-  const navigate = useNavigate();
 
   return (
     <List
@@ -33,7 +31,8 @@ const BlogList: React.FC = () => {
           }
         >
           <List.Item.Meta
-            title={<a onClick={()=>navigate('/blog')}>{item.title}</a>}
+            // 修改 onClick 事件处理函数
+            title={<a onClick={() => window.open(item.contentLink, '_blank')}>{item.title}</a>}
             description={item.description}
           />
           {item.firstSentence}
