@@ -54,9 +54,34 @@ const PersonalDetailsPage: React.FC = () => {
                             </ul>
                             <h3 className={styles.subtitle}>独立开发者项目</h3>
                             <ul className={styles.list}>
-                                <li className={styles.projectItem}>飞书多维表格插件</li>
-                                <li className={styles.projectItem}>Chrome浏览器插件</li>
-                                <li className={styles.projectItem}>微信小程序</li>
+                                <li className={styles.projectItem}>
+                                    飞书多维表格插件 - 分账计算
+                                    <a 
+                                        href="https://v0j3dbddef2.feishu.cn/base/extension/replit_3d519d1a976ee3e5" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className={styles.link}
+                                    >
+                                        (插件链接)
+                                    </a>
+                                    <p className={styles.projectDesc}>
+                                        基于借贷记账法实现的分账功能，可自动计算多人AA制消费后的最优转账方案
+                                    </p>
+                                </li>
+                                <li className={styles.projectItem}>
+                                    Chrome浏览器插件 - 拼音小助手
+                                    <a 
+                                        href="https://chromewebstore.google.com/detail/hmojmlnloknlieigobgihcbjbflmfmli?utm_source=item-share-cb" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className={styles.link}
+                                    >
+                                        (插件链接)
+                                    </a>
+                                    <p className={styles.projectDesc}>
+                                        帮助用户快速查询汉字拼音的浏览器插件
+                                    </p>
+                                </li>
                             </ul>
                         </div>
                     </Col>
