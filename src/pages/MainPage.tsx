@@ -13,7 +13,7 @@ interface MainPageProps {
 const MainPage: React.FC<MainPageProps> = ({ }) => {
     return (
         <Layout className={styles.layout}>
-            <Header className={styles.header}>
+            <Header>
                 <GlobalHeader />
             </Header>
             <Content className={styles.content}>

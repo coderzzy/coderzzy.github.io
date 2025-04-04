@@ -10,13 +10,13 @@ interface MainPageProps {
 }
 
 const MainPage: React.FC<MainPageProps> = ({ }) => {
-    useEffect(()=>{
+    useEffect(() => {
         console.log(11111);
     });
 
     return (
         <Layout>
-            <Header style={{ display: 'flex', alignItems: 'center' }}>
+            <Header>
                 <GlobalHeader />
             </Header>
             <Content>
