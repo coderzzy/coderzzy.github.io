@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout, Row, Col, Image, Card, Divider, List, Tooltip } from 'antd';
 import { GithubOutlined, ZhihuOutlined, WechatOutlined, RedEnvelopeOutlined } from '@ant-design/icons';
 import GlobalHeader from '../components/GlobalHeader';
+import GlobalFooter from '../components/GlobalFooter';
 import styles from './PersonalDetailsPage.module.less';
 
 const { Header, Content } = Layout;
@@ -101,6 +102,7 @@ const PersonalDetailsPage: React.FC = () => {
                     </Col>
                 </Row>
             </Content>
+            <GlobalFooter />
         </Layout>
     );
 };

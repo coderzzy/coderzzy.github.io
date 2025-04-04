@@ -18,7 +18,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({ }) => {
 
     return (
         <div className={styles.header}>
-            <div style={{ fontSize: '1rem', cursor: 'pointer' }} onClick={() => { window.location.href = './' }}>张小刀的杂文</div>
+            <div style={{ fontSize: '1rem', cursor: 'pointer' }} onClick={() => { window.location.href = './' }}>张小刀的博客</div>
             <Menu
                 mode="horizontal"
                 onClick={handleMenuClick}

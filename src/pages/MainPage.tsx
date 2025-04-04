@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './MainPage.module.less';
 import { Layout } from 'antd';
 import GlobalHeader from '../components/GlobalHeader';
+import GlobalFooter from '../components/GlobalFooter';
 import BlogList from '../components/BlogList';
 
 const { Header, Content } = Layout;
@@ -39,6 +40,7 @@ const MainPage: React.FC<MainPageProps> = ({ }) => {
                     <BlogList />
                 </div>
             </Content>
+            <GlobalFooter />
         </Layout>
     );
 };
