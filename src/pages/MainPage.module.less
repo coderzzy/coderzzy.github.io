@@ -56,3 +56,74 @@
     width: 100%;
     background: black;
 }
+
+.layout {
+    min-height: 100vh;
+    background: #f8f9fa;
+}
+
+.header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 0 24px;
+    z-index: 1;
+}
+
+.heroSection {
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    position: relative;
+    padding-bottom: 80px; /* 底部留出空间 */
+    
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 80px;
+        background: linear-gradient(to top, #f8f9fa, transparent);
+    }
+}
+
+.blogListContainer {
+    max-width: 1200px;
+    margin: -40px auto 0;
+    padding: 0 24px;
+    position: relative;
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.heroContent {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 24px;
+}
+
+.heroTitle {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.heroSubtitle {
+    font-size: 1.5rem;
+    opacity: 0.9;
+}
+
+.blogListWrapper {
+    max-width: 1200px;
+    margin: -80px auto 0;
+    padding: 0 24px;
+    position: relative;
+    z-index: 2;
+}

@@ -12,14 +12,16 @@ interface MainPageProps {
 
 const MainPage: React.FC<MainPageProps> = ({ }) => {
     return (
-        <Layout>
-            <Header style={{ display: 'flex', alignItems: 'center' }}>
+        <Layout className={styles.layout}>
+            <Header className={styles.header}>
                 <GlobalHeader />
             </Header>
-            <Content>
-                <div className={styles.brandContainer}>
-                    <div className={styles.overlay}></div>
-                    <div className={styles.brandText}>小刀需磨<br />方才不钝</div>
+            <Content className={styles.content}>
+                <div className={styles.heroSection}>
+                    <div className={styles.heroContent}>
+                        <h1 className={styles.heroTitle}>小刀需磨</h1>
+                        <p className={styles.heroSubtitle}>方才不钝</p>
+                    </div>
                 </div>
                 <div className={styles.blogListContainer}>
                     <BlogList />
