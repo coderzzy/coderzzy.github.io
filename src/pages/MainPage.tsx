@@ -25,11 +25,11 @@ const MainPage: React.FC<MainPageProps> = ({ }) => {
                             <img src="/images/avatar.jpg" alt="avatar" className={styles.avatar} />
                             <h2 className={styles.profileName}>张小刀</h2>
                             <div className={styles.socialLinks}>
-                                <a href="https://github.com/yourname" target="_blank" className={styles.socialIcon}>
-                                    <img src="/public/icons/github.svg" alt="GitHub" />
+                                <a href="https://github.com/coderzzy" target="_blank" className={styles.socialIcon}>
+                                    <img src="/icons/github.svg" alt="GitHub" />
                                 </a>
-                                <a href="https://twitter.com/yourname" target="_blank" className={styles.socialIcon}>
-                                    <img src="/public/icons/twitter.svg" alt="Twitter" />
+                                <a href="https://www.zhihu.com/people/zhang-xiao-yu-41-25" target="_blank" className={styles.socialIcon}>
+                                    <img src="/icons/zhihu.svg" alt="ZhiHu" />
                                 </a>
                             </div>
                         </div>
