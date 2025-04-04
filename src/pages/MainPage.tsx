@@ -3,7 +3,6 @@ import styles from './MainPage.module.less'
 import { Layout, Card } from 'antd';
 import GlobalHeader from '../components/GlobalHeader'
 import BlogList from '../components/BlogList'
-import FloatingAssistant from '../components/FloatingAssistant/HuskyAssistant'
 
 const { Header, Content, Sider } = Layout;
 
@@ -26,7 +25,6 @@ const MainPage: React.FC<MainPageProps> = ({ }) => {
                     <BlogList />
                 </div>
             </Content>
-            <FloatingAssistant />
         </Layout>
     );
 }
