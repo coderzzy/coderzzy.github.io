@@ -21,6 +21,19 @@ const MainPage: React.FC<MainPageProps> = ({ }) => {
                     <div className={styles.heroContent}>
                         <h1 className={styles.heroTitle}>小刀需磨</h1>
                         <p className={styles.heroSubtitle}>方才不钝</p>
+                        {/* 新增个人信息 */}
+                        <div className={styles.heroProfile}>
+                            <img src="/images/avatar.jpg" alt="avatar" className={styles.avatar} />
+                            <h2 className={styles.profileName}>张小刀</h2>
+                            <div className={styles.socialLinks}>
+                                <a href="https://github.com/yourname" target="_blank" className={styles.socialIcon}>
+                                    <img src="/public/icons/github.svg" alt="GitHub" />
+                                </a>
+                                <a href="https://twitter.com/yourname" target="_blank" className={styles.socialIcon}>
+                                    <img src="/public/icons/twitter.svg" alt="Twitter" />
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className={styles.blogListContainer}>
