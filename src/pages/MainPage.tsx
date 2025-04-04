@@ -1,10 +1,10 @@
 import React from 'react';
-import styles from './MainPage.module.less'
-import { Layout, Card } from 'antd';
-import GlobalHeader from '../components/GlobalHeader'
-import BlogList from '../components/BlogList'
+import styles from './MainPage.module.less';
+import { Layout } from 'antd';
+import GlobalHeader from '../components/GlobalHeader';
+import BlogList from '../components/BlogList';
 
-const { Header, Content, Sider } = Layout;
+const { Header, Content } = Layout;
 
 interface MainPageProps {
     // props
@@ -21,7 +21,6 @@ const MainPage: React.FC<MainPageProps> = ({ }) => {
                     <div className={styles.heroContent}>
                         <h1 className={styles.heroTitle}>小刀需磨</h1>
                         <p className={styles.heroSubtitle}>方才不钝</p>
-                        {/* 新增个人信息 */}
                         <div className={styles.heroProfile}>
                             <img src="/images/avatar.jpg" alt="avatar" className={styles.avatar} />
                             <h2 className={styles.profileName}>张小刀</h2>
@@ -42,6 +41,6 @@ const MainPage: React.FC<MainPageProps> = ({ }) => {
             </Content>
         </Layout>
     );
-}
+};
 
 export default MainPage;

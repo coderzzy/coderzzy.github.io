@@ -1,39 +1,17 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { ConfigProvider } from 'antd';
-import { gray } from '@ant-design/colors';
-import { useGlobalContext } from './context/GlobalContext'
-import MainPage from './pages/MainPage'
-import BlogPage from './pages/BlogPage'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import MainPage from './pages/MainPage';
+import PersonalDetails from './components/PersonalDetails';
 
-
-interface AppProps {
-  // props
-}
-
-const App: React.FC<AppProps> = ({ }) => {
-  const { colorTextBase } = useGlobalContext();
-
-  return (
-    <ConfigProvider theme={{
-      token: {
-        // Seed Token，影响范围大
-        // colorPrimary: colorPrimary,
-        colorTextBase: gray.primary,
-        borderRadius: 2,
-
-        // 派生变量，影响范围小
-        // colorBgContainer: '#f6ffed',
-      },
-    }}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/blog" element={<BlogPage />} />
-        </Routes>
-      </BrowserRouter>
-    </ConfigProvider>
-  );
-}
+const App: React.FC = () => {
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<MainPage />} />
+                <Route path="/personal-details" element={<PersonalDetails />} />
+            </Routes>
+        </Router>
+    );
+};
 
 export default App;
