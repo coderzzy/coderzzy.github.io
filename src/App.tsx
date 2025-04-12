@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import PersonalDetailsPage from './pages/PersonalDetailsPage';
+import KnowledgeBasePage from './pages/KnowledgeBasePage'; // 新增
 
 const App: React.FC = () => {
     return (
@@ -9,6 +10,7 @@ const App: React.FC = () => {
             <Routes>
                 <Route path="/" element={<MainPage />} />
                 <Route path="/personal-details" element={<PersonalDetailsPage />} />
+                <Route path="/knowledge-base" element={<KnowledgeBasePage />} /> // 新增
             </Routes>
         </Router>
     );

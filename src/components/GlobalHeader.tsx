@@ -1,5 +1,5 @@
-import React from 'react';
 import { Menu } from 'antd';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './GlobalHeader.module.less';
 
@@ -14,6 +14,9 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({ }) => {
         if (e.key === 'about') {
             navigate('/personal-details');
         }
+        if (e.key === 'knowledge') {
+            navigate('/knowledge-base');
+        }
     };
 
     return (
@@ -23,6 +26,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({ }) => {
                 mode="horizontal"
                 onClick={handleMenuClick}
             >
+                <Menu.Item key="knowledge">知识库</Menu.Item>
                 <Menu.Item key="about">关于</Menu.Item>
             </Menu>
         </div>
