@@ -61,6 +61,11 @@ const PersonalDetailsPage: React.FC = () => {
                             <List
                                 dataSource={[
                                     {
+                                        title: 'React + Ant Design 的前端博客',
+                                        link: 'https://coderzzy.github.io/',
+                                        description: 'React + Ant Design，AI Coding 项目'
+                                    },
+                                    {
                                         title: '飞书多维表格插件 - 分账计算',
                                         link: 'https://v0j3dbddef2.feishu.cn/base/extension/replit_3d519d1a976ee3e5',
                                         description: '基于借贷记账法实现的分账功能，可自动计算多人AA制消费后的最优转账方案'
@@ -89,7 +94,7 @@ const PersonalDetailsPage: React.FC = () => {
                                                 className={styles.link}
                                                 style={{ fontSize: '0.9em' }} // 临时使用内联样式调小字体
                                             >
-                                                (插件链接)
+                                                (项目链接)
                                             </a>
                                             <p className={styles.projectDesc}>
                                                 {item.description}
