@@ -17,9 +17,9 @@ const KnowledgePage: React.FC = () => {
             image: '/images/knowledge/fitness.jpg'
         },
         {
-            title: '股票K线知识总结',
+            title: '股票K线知识总结(待完成)',
             description: '包含各种K线形态及其市场含义的分析',
-            link: '/knowledge-base/k-chart',
+            link: '/knowledge/k_chart',
             image: '/images/knowledge/k_chart.jpg'
         }
     ];

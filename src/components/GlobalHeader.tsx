@@ -15,7 +15,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({ }) => {
             navigate('/personal-details');
         }
         if (e.key === 'knowledge') {
-            navigate('/knowledge-base');
+            navigate('/knowledge');
         }
     };
 
