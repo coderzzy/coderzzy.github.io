@@ -4,16 +4,16 @@ import { Link } from 'react-router-dom';
 import { Layout } from 'antd';
 import GlobalHeader from '../components/GlobalHeader';
 import GlobalFooter from '../components/GlobalFooter';
-import styles from './KnowledgeBasePage.module.less';
+import styles from './KnowledgePage.module.less';
 
 const { Header, Content } = Layout;
 
-const KnowledgeBasePage: React.FC = () => {
+const KnowledgePage: React.FC = () => {
     const knowledgeList = [
         {
             title: '《囚徒健身》知识总结',
             description: '包含俯卧撑、深蹲、引体向上等训练动作的详细指南',
-            link: '/knowledge-base/fitness',
+            link: '/knowledge/fitness',  // 修改为新的路由
             image: '/images/knowledge/fitness.jpg'
         },
         {
@@ -58,4 +58,4 @@ const KnowledgeBasePage: React.FC = () => {
     );
 };
 
-export default KnowledgeBasePage;
+export default KnowledgePage;
