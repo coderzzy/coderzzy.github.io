@@ -1,7 +1,12 @@
 import React from 'react';
 import { Card, List } from 'antd';
 import { Link } from 'react-router-dom';
+import { Layout } from 'antd';
+import GlobalHeader from '../components/GlobalHeader';
+import GlobalFooter from '../components/GlobalFooter';
 import styles from './KnowledgeBasePage.module.less';
+
+const { Header, Content } = Layout;
 
 const KnowledgeBasePage: React.FC = () => {
     const knowledgeList = [
@@ -20,28 +25,36 @@ const KnowledgeBasePage: React.FC = () => {
     ];
 
     return (
-        <div className={styles.container}>
-            <h1 className={styles.title}>知识库</h1>
-            <List
-                grid={{ gutter: 16, column: 2 }}
-                dataSource={knowledgeList}
-                renderItem={(item) => (
-                    <List.Item>
-                        <Link to={item.link}>
-                            <Card
-                                hoverable
-                                cover={<img alt={item.title} src={item.image} />}
-                            >
-                                <Card.Meta 
-                                    title={item.title} 
-                                    description={item.description} 
-                                />
-                            </Card>
-                        </Link>
-                    </List.Item>
-                )}
-            />
-        </div>
+        <Layout className={styles.layout}>
+            <Header>
+                <GlobalHeader />
+            </Header>
+            <Content className={styles.content}>
+                <div className={styles.container}>
+                    <h1 className={styles.title}>知识库</h1>
+                    <List
+                        grid={{ gutter: 16, column: 2 }}
+                        dataSource={knowledgeList}
+                        renderItem={(item) => (
+                            <List.Item>
+                                <Link to={item.link}>
+                                    <Card
+                                        hoverable
+                                        cover={<img alt={item.title} src={item.image} />}
+                                    >
+                                        <Card.Meta 
+                                            title={item.title} 
+                                            description={item.description} 
+                                        />
+                                    </Card>
+                                </Link>
+                            </List.Item>
+                        )}
+                    />
+                </div>
+            </Content>
+            <GlobalFooter />
+        </Layout>
     );
 };
 
