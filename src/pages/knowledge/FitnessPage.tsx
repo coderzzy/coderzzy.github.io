@@ -29,26 +29,28 @@ const FitnessPage: React.FC = () => {
                 <div className={styles.container}>
                     <Title level={2} className={styles.title}>《囚徒健身》知识总结</Title>
 
-                    <Tabs
-                        activeKey={activeActionIndex.toString()}
-                        onChange={(key) => setActiveActionIndex(parseInt(key))}
-                        className={styles.actionTabs}
-                    >
-                        {actionData.map((action, index) => (
-                            <TabPane tab={action.actionName} key={index.toString()} />
-                        ))}
-                    </Tabs>
+                    <div className={styles.tabsContainer}>
+                        <Tabs
+                            activeKey={activeActionIndex.toString()}
+                            onChange={(key) => setActiveActionIndex(parseInt(key))}
+                            className={styles.actionTabs}
+                        >
+                            {actionData.map((action, index) => (
+                                <TabPane tab={action.actionName} key={index.toString()} />
+                            ))}
+                        </Tabs>
 
-                    <Tabs
-                        activeKey={activeLevelIndex.toString()}
-                        onChange={(key) => setActiveLevelIndex(parseInt(key))}
-                        className={styles.levelTabs}
-                        tabPosition="left"
-                    >
-                        {currentAction.levelList.map((level, index) => (
-                            <TabPane tab={level.levelName} key={index.toString()} />
-                        ))}
-                    </Tabs>
+                        <Tabs
+                            activeKey={activeLevelIndex.toString()}
+                            onChange={(key) => setActiveLevelIndex(parseInt(key))}
+                            className={styles.levelTabs}
+                            tabPosition="top"
+                        >
+                            {currentAction.levelList.map((level, index) => (
+                                <TabPane tab={level.levelName} key={index.toString()} />
+                            ))}
+                        </Tabs>
+                    </div>
 
                     <Card className={styles.detailCard}>
                         <Title level={4}>{currentLevel.levelName}</Title>

@@ -17,22 +17,30 @@
   margin-bottom: 24px;
 }
 
-.actionTabs {
-  margin-bottom: 24px;
-}
-
-.levelTabs {
+.tabsContainer {
   margin-bottom: 24px;
   
-  :global {
-    .ant-tabs-tab {
-      text-align: left;
-    }
+  .actionTabs, .levelTabs {
+    margin-bottom: 16px;
   }
 }
 
 .detailCard {
-  margin-top: 24px;
+  margin-top: 16px;
+}
+
+// 移动端适配
+@media (max-width: 768px) {
+  .content {
+    padding: 12px;
+  }
+  
+  .tabsContainer {
+    .ant-tabs-nav {
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+  }
 }
 
 .imageContainer {
