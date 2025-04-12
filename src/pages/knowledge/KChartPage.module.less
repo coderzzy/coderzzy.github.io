@@ -39,11 +39,14 @@
 .imageWrapper {
   flex: 1;
   min-width: 300px;
+  max-width: 600px;  // 新增最大宽度限制
   
   img {
     width: 100%;
     height: auto;
     border-radius: 4px;
+    max-height: 400px;  // 新增最大高度限制
+    object-fit: contain;  // 保持图片比例
   }
 }
 
