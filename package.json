@@ -35,6 +35,7 @@
     ]
   },
   "devDependencies": {
+    "@craco/craco": "^7.1.0",
     "@types/customize-cra": "^1.0.8",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
@@ -45,6 +46,7 @@
     "less-loader": "^7.3.0",
     "postcss": "^8.4.49",
     "react-app-rewired": "^2.2.1",
-    "tailwindcss": "^3.4.16"
+    "tailwindcss": "^3.4.16",
+    "terser-webpack-plugin": "^5.3.14"
   }
 }

@@ -5,6 +5,8 @@ const {
     addWebpackModuleRule,
     adjustStyleLoaders,
 } = require('customize-cra')
+const TerserPlugin = require('terser-webpack-plugin')
+const { whenProd } = require('@craco/craco')
 
 // 自定义 Webpack 配置函数
 const customWebpackConfig = (config) => {
@@ -13,6 +15,28 @@ const customWebpackConfig = (config) => {
         fs: false,
         path: false
     };
+    
+    // 生产环境添加混淆和压缩配置
+    whenProd(() => {
+        config.devtool = false; // 禁用source map生成
+        config.optimization.minimize = true;
+        config.optimization.minimizer = [
+            new TerserPlugin({
+                terserOptions: {
+                    compress: {
+                        drop_console: true,
+                        drop_debugger: true,
+                    },
+                    mangle: true, // 启用代码混淆
+                    output: {
+                        comments: false,
+                        beautify: false, // 禁用美化输出
+                    },
+                },
+            }),
+        ]
+    })
+    
     return config;
 };
 
