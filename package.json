@@ -28,7 +28,7 @@
     "build": "react-app-rewired build && cp build/index.html build/404.html",
     "postbuild": "react-snap",
     "test": "react-app-rewired test",
-    "deploy": "react-app-rewired build && cp build/index.html build/404.html && gh-pages -d build"
+    "deploy": "react-app-rewired build && cp build/index.html build/404.html && react-snap && gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
