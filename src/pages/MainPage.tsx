@@ -27,10 +27,10 @@ const MainPage: React.FC<MainPageProps> = ({ }) => {
                             <h2 className={styles.profileName}>张小刀</h2>
                             <div className={styles.socialLinks}>
                                 <a href="https://github.com/coderzzy" target="_blank" className={styles.socialIcon}>
-                                    <img src="/icons/github.svg" alt="GitHub" />
+                                    <img src="/images/social_media/github.svg" alt="GitHub" />
                                 </a>
                                 <a href="https://www.zhihu.com/people/zhang-xiao-yu-41-25" target="_blank" className={styles.socialIcon}>
-                                    <img src="/icons/zhihu.svg" alt="ZhiHu" />
+                                    <img src="/images/social_media/zhihu.svg" alt="ZhiHu" />
                                 </a>
                             </div>
                         </div>

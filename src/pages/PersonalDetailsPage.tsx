@@ -39,7 +39,7 @@ const PersonalDetailsPage: React.FC = () => {
                                     </span>
                                     <Image
                                         width={100}
-                                        src="/social_media/wechat_official_account.png"
+                                        src="/images/social_media/wechat_official_account.png"
                                         alt="微信公众号二维码"
                                         className={styles.socialMediaQrCode}
                                     />
@@ -50,7 +50,7 @@ const PersonalDetailsPage: React.FC = () => {
                                     </span>
                                     <Image
                                         width={100}
-                                        src="/social_media/rednote_account.jpg"
+                                        src="/images/social_media/rednote_account.jpg"
                                         alt="小红书二维码"
                                         className={styles.socialMediaQrCode}
                                     />
@@ -79,26 +79,43 @@ const PersonalDetailsPage: React.FC = () => {
                                         title: 'Chrome浏览器插件 - 打工人小助手',
                                         link: 'https://chromewebstore.google.com/detail/elhofejeghpaedmaheibfaenfgbbjddl?utm_source=item-share-cb',
                                         description: '帮助用户快速查询工作状态的浏览器插件'
+                                    },
+                                    {
+                                        title: '小刀de预览小助手',
+                                        description: '增强原生微信预览能力，支持.srt、.py、.svg等文件的预览',
+                                        image: '/images/project/mini_program.jpg'
                                     }
                                 ]}
                                 renderItem={(item) => (
-                                    <List.Item>
-                                        <div>
+                                    <List.Item style={{ marginBottom: 24 }}>
+                                        <div style={{ paddingLeft: 16 }}>
                                             <Tooltip title={item.description}>
-                                                <span>{item.title}</span>
+                                                <div style={{ fontSize: '1.1em', fontWeight: 500 }}>{item.title}</div>
                                             </Tooltip>
-                                            <a 
-                                                href={item.link} 
-                                                target="_blank" 
-                                                rel="noopener noreferrer"
-                                                className={styles.link}
-                                                style={{ fontSize: '0.9em' }} // 临时使用内联样式调小字体
-                                            >
-                                                (项目链接)
-                                            </a>
-                                            <p className={styles.projectDesc}>
+                                            {item.link && (
+                                                <a 
+                                                    href={item.link} 
+                                                    target="_blank" 
+                                                    rel="noopener noreferrer"
+                                                    className={styles.link}
+                                                    style={{ fontSize: '0.9em', display: 'block', margin: '8px 0' }}
+                                                >
+                                                    (项目链接)
+                                                </a>
+                                            )}
+                                            <p className={styles.projectDesc} style={{ margin: '8px 0' }}>
                                                 {item.description}
                                             </p>
+                                            {item.image && (
+                                                <div style={{ margin: '8px 0' }}>
+                                                    <Image
+                                                        width={100}
+                                                        src={item.image}
+                                                        alt={item.title}
+                                                        className={styles.socialMediaQrCode}
+                                                    />
+                                                </div>
+                                            )}
                                         </div>
                                     </List.Item>
                                 )}
