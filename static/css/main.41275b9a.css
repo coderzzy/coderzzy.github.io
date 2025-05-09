@@ -1,0 +1,470 @@
+.body--D4G9V {
+  width: 100vw;
+}
+.brandContainer--rox91 {
+  position: relative;
+  width: 100%;
+  height: 50vh;
+  background: linear-gradient(to right, #5ffff4, #feb47b);
+  /* 半透明遮罩层 */
+  /* 文字样式 */
+}
+.brandContainer--rox91 .overlay--kOnkf {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000000b4;
+  /* 保证遮罩层在图片上方 */
+  z-index: 1;
+}
+.brandContainer--rox91 .brandText--IGlmr {
+  position: absolute;
+  /* 确保文字在遮罩层上方 */
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  /* 文字投影效果 */
+  text-shadow: 10px 10px 10px rgba(0, 0, 0, 0.7);
+}
+.profileContainer--m9MFA {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 30vh;
+  background: white;
+}
+.blogListContainer--fKPoG {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  background: black;
+}
+.layout--DAdPA {
+  min-height: 100vh;
+  background: #f8f9fa;
+}
+.heroSection--lu0B9 {
+  height: auto;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  position: relative;
+  padding-bottom: 80px;
+  /* 底部留出空间 */
+}
+.heroSection--lu0B9::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: linear-gradient(to top, #f8f9fa, transparent);
+}
+.blogListContainer--fKPoG {
+  max-width: 1200px;
+  margin: -40px auto 0;
+  padding: 0 24px;
+  position: relative;
+  background: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.heroContent--MtJ8_ {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 24px;
+}
+.heroTitle--a03BQ {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.heroSubtitle--W5YSY {
+  font-size: 1.5rem;
+  opacity: 0.9;
+}
+.heroProfile--UBK3D {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  /* 与标题保持距离 */
+}
+.avatar--IyUW7 {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.profileName--IIyWI {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-top: 10px;
+  color: white;
+}
+.socialLinks--ANqi3 {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+.socialIcon--_oWRX img {
+  width: 28px;
+  height: 28px;
+  transition: transform 0.2s ease-in-out;
+}
+.socialIcon--_oWRX:hover img {
+  transform: scale(1.2);
+}
+/* 📱 移动端适配 */
+@media screen and (max-width: 768px) {
+  .avatar--IyUW7 {
+    width: 80px;
+    height: 80px;
+  }
+  .profileName--IIyWI {
+    font-size: 1.5rem;
+  }
+  .socialLinks--ANqi3 {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .socialIcon--_oWRX img {
+    width: 24px;
+    height: 24px;
+  }
+}
+.blogListWrapper--AREA8 {
+  max-width: 1200px;
+  margin: -80px auto 0;
+  padding: 0 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.header--MusPq {
+  background: rgba(255, 255, 255, 0.95);
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 0 24px;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer--FEsmd {
+  text-align: center;
+  padding: 20px 0;
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+}
+
+.layout--hMwYP {
+  min-height: 100vh;
+  background-color: #f4f6f8;
+  /* 更改背景颜色 */
+}
+.content--h3GuV {
+  padding: 48px;
+  /* 增加内容区域的内边距 */
+}
+.card--pzprw {
+  background-color: #fff;
+  padding: 48px;
+  border-radius: 16px;
+  /* 增大圆角半径 */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  /* 增强阴影效果 */
+  transition: transform 0.3s ease;
+  /* 添加过渡效果 */
+}
+.card--pzprw:hover {
+  transform: translateY(-5px);
+  /* 鼠标悬停时卡片上移 */
+}
+.title--FUCjj {
+  font-size: 36px;
+  /* 增大标题字体大小 */
+  margin-bottom: 24px;
+  color: #333;
+}
+.name--Haw1a {
+  font-size: 28px;
+  /* 增大姓名字体大小 */
+  margin-bottom: 16px;
+  color: #555;
+}
+.slogan--j6rd3 {
+  font-size: 20px;
+  /* 增大标语字体大小 */
+  margin-bottom: 32px;
+  color: #777;
+}
+.subtitle--WBDP6 {
+  font-size: 24px;
+  /* 增大副标题字体大小 */
+  margin-bottom: 16px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  /* 添加下划线 */
+  padding-bottom: 8px;
+}
+.list--r2pgG {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 32px;
+}
+.list--r2pgG li {
+  margin-bottom: 16px;
+}
+.link--Al_5p {
+  font-size: 0.9em;
+  font-size: 20px;
+  /* 增大链接字体大小 */
+  color: #1890ff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.link--Al_5p:hover {
+  color: #40a9ff;
+  /* 鼠标悬停时链接颜色变化 */
+}
+.socialMediaItem--wumSo {
+  display: flex;
+  align-items: center;
+}
+.socialMediaText--EOF2X {
+  font-size: 20px;
+  /* 增大社交媒体文字字体大小 */
+  margin-right: 16px;
+}
+.socialMediaQrCode--T3q5d {
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+.socialMediaQrCode--T3q5d:hover {
+  transform: scale(1.05);
+}
+.projectItem--IUvsC {
+  font-size: 20px;
+  /* 增大项目字体大小 */
+  color: #555;
+}
+.projectDesc--ZIvBc {
+  font-size: 16px;
+  color: #666;
+  margin-top: 8px;
+  margin-left: 16px;
+}
+
+.layout--hmmXz {
+  min-height: 100vh;
+  background-color: #f4f6f8;
+}
+.content--csU2l {
+  padding: 24px;
+}
+.container--a5KPW {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.title--Gxh_K {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 2rem;
+}
+.ant-card-cover {
+  height: 200px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ant-card-cover img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+@media (max-width: 768px) {
+  .list--r58B7 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.layout--WxZE_ {
+  min-height: 100vh;
+  background-color: #f4f6f8;
+}
+.content--HcZ1Z {
+  padding: 24px;
+}
+.container--WXuIP {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.title--nEwic {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.tabsContainer--D_9vo {
+  margin-bottom: 24px;
+}
+.tabsContainer--D_9vo .actionTabs--mfGzy,
+.tabsContainer--D_9vo .levelTabs--L6gss {
+  margin-bottom: 16px;
+}
+.detailCard--EOgXb {
+  margin-top: 16px;
+}
+@media (max-width: 768px) {
+  .content--HcZ1Z {
+    padding: 12px;
+  }
+  .tabsContainer--D_9vo .ant-tabs-nav--MkOJY {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+.imageContainer--CPMx9 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 16px;
+}
+.imageWrapper--zCdsz {
+  flex: 1;
+  min-width: 300px;
+}
+.imageWrapper--zCdsz img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.layout--vrR52 {
+  min-height: 100vh;
+  background-color: #f4f6f8;
+}
+.content--vSSkR {
+  padding: 24px;
+}
+.container--zR0jF {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.title--Npcbz {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.tabsContainer--rG7Bx {
+  margin-bottom: 24px;
+}
+.tabsContainer--rG7Bx .categoryTabs--zG2Kx,
+.tabsContainer--rG7Bx .kTabs--aWrJy {
+  margin-bottom: 16px;
+}
+.detailCard--wwpcW {
+  margin-top: 16px;
+}
+.imageContainer--aleUi {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 16px;
+}
+.imageWrapper--qvBlq {
+  flex: 1;
+  min-width: 300px;
+  max-width: 600px;
+}
+.imageWrapper--qvBlq img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  max-height: 400px;
+  object-fit: contain;
+}
+@media (max-width: 768px) {
+  .content--vSSkR {
+    padding: 12px;
+  }
+  .tabsContainer--rG7Bx .ant-tabs-nav--sY1pW {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+/* src/index.css */
+/* @import 'tailwindcss/base'; */
+.container {
+  width: 100%;
+}
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+.block {
+  display: block;
+}
+.grid {
+  display: grid;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+
+
