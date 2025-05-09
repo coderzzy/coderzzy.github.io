@@ -211,7 +211,7 @@
   color: #555;
 }
 .slogan--j6rd3 {
-  font-size: 20px;
+  font-size: 1.3em;
   /* 增大标语字体大小 */
   margin-bottom: 32px;
   color: #777;
@@ -234,8 +234,7 @@
   margin-bottom: 16px;
 }
 .link--Al_5p {
-  font-size: 0.9em;
-  font-size: 20px;
+  font-size: 1.3em;
   /* 增大链接字体大小 */
   color: #1890ff;
   text-decoration: none;
@@ -250,7 +249,7 @@
   align-items: center;
 }
 .socialMediaText--EOF2X {
-  font-size: 20px;
+  font-size: 1.3em;
   /* 增大社交媒体文字字体大小 */
   margin-right: 16px;
 }
