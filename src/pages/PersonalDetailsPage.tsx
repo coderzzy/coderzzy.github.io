@@ -17,45 +17,48 @@ const PersonalDetailsPage: React.FC = () => {
                 <Row gutter={[24, 24]} justify="center">
                     <Col xs={24} sm={20} md={18} lg={16}>
                         <Card className={styles.card}>
-                            <h1 className={styles.title}>个人详情</h1>
-                            <h2 className={styles.name}>张小刀</h2>
-                            <p className={styles.slogan}>Slogan: 小刀需磨，方才不钝</p>
+                            <h3 className={styles.name}>张小刀</h3>
+                            <div style={{ paddingLeft: 16 }}>
+                                <p className={styles.slogan}>Slogan: 小刀需磨，方才不钝</p>
+                            </div>
                             <Divider />
                             <h3 className={styles.subtitle}>社交媒体账号</h3>
-                            <ul className={styles.list}>
-                                <li>
-                                    <a href="https://github.com/coderzzy" target="_blank" className={styles.link}>
-                                        <GithubOutlined /> Github
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://www.zhihu.com/people/zhang-xiao-yu-41-25" target="_blank" className={styles.link}>
-                                        <ZhihuOutlined /> 知乎
-                                    </a>
-                                </li>
-                                <li className={styles.socialMediaItem}>
-                                    <span className={styles.socialMediaText}>
-                                        <WechatOutlined /> 微信公众号：
-                                    </span>
-                                    <Image
-                                        width={100}
-                                        src="/images/social_media/wechat_official_account.png"
-                                        alt="微信公众号二维码"
-                                        className={styles.socialMediaQrCode}
-                                    />
-                                </li>
-                                <li className={styles.socialMediaItem}>
-                                    <span className={styles.socialMediaText}>
-                                        <RedEnvelopeOutlined /> 小红书号：
-                                    </span>
-                                    <Image
-                                        width={100}
-                                        src="/images/social_media/rednote_account.jpg"
-                                        alt="小红书二维码"
-                                        className={styles.socialMediaQrCode}
-                                    />
-                                </li>
-                            </ul>
+                            <div style={{ paddingLeft: 16 }}>
+                                <ul className={styles.list}>
+                                    <li>
+                                        <a href="https://github.com/coderzzy" target="_blank" className={styles.link}>
+                                            <GithubOutlined /> Github
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="https://www.zhihu.com/people/zhang-xiao-yu-41-25" target="_blank" className={styles.link}>
+                                            <ZhihuOutlined /> 知乎
+                                        </a>
+                                    </li>
+                                    <li className={styles.socialMediaItem}>
+                                        <span className={styles.socialMediaText}>
+                                            <WechatOutlined /> 微信公众号：
+                                        </span>
+                                        <Image
+                                            width={100}
+                                            src="/images/social_media/wechat_official_account.png"
+                                            alt="微信公众号二维码"
+                                            className={styles.socialMediaQrCode}
+                                        />
+                                    </li>
+                                    <li className={styles.socialMediaItem}>
+                                        <span className={styles.socialMediaText}>
+                                            <RedEnvelopeOutlined /> 小红书号：
+                                        </span>
+                                        <Image
+                                            width={100}
+                                            src="/images/social_media/rednote_account.jpg"
+                                            alt="小红书二维码"
+                                            className={styles.socialMediaQrCode}
+                                        />
+                                    </li>
+                                </ul>
+                            </div>
                             <Divider />
                             <h3 className={styles.subtitle}>独立开发者项目</h3>
                             <List
@@ -93,9 +96,9 @@ const PersonalDetailsPage: React.FC = () => {
                                                 <div style={{ fontSize: '1.1em', fontWeight: 500 }}>{item.title}</div>
                                             </Tooltip>
                                             {item.link && (
-                                                <a 
-                                                    href={item.link} 
-                                                    target="_blank" 
+                                                <a
+                                                    href={item.link}
+                                                    target="_blank"
                                                     rel="noopener noreferrer"
                                                     className={styles.link}
                                                     style={{ fontSize: '0.9em', display: 'block', margin: '8px 0' }}
